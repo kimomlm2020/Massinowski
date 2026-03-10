@@ -1,0 +1,579 @@
+// ============================================
+// VARIABLES
+// ============================================
+$color-bg-dark: #0a0a0a;
+$color-bg-card: #111111;
+$color-bg-hover: #1a1a1a;
+$color-gold: #f7ef8a;
+$color-gold-light: #e8d5a3;
+$color-gold-dark: #f7f08ad3;
+$color-text: #e0e0e0;
+$color-text-muted: #888888;
+$color-white: #ffffff;
+$transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+// ============================================
+// MIXINS
+// ============================================
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin gold-gradient-text {
+  background: linear-gradient(135deg, $color-gold 0%, $color-gold-light 50%, $color-gold 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+@mixin gold-border {
+  border: 1px solid rgba($color-gold, 0.3);
+  box-shadow: 0 0 20px rgba($color-gold, 0.1);
+}
+
+@mixin hover-lift {
+  transition: $transition;
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 40px rgba($color-gold, 0.15);
+  }
+}
+
+// ============================================
+// FOOTER PRINCIPAL
+// ============================================
+.footer {
+  position: relative;
+  background: linear-gradient(180deg, $color-bg-dark 0%, #050505 100%);
+  color: $color-text;
+  overflow: hidden;
+
+  // Glow doré en arrière-plan
+  .footer-glow {
+    position: absolute;
+    top: -50%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 800px;
+    height: 800px;
+    background: radial-gradient(circle, rgba($color-gold, 0.03) 0%, transparent 70%);
+    pointer-events: none;
+  }
+}
+
+// ============================================
+// CONTAINER
+// ============================================
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 24px;
+
+  @media (max-width: 768px) {
+    padding: 0 16px;
+  }
+}
+
+// ============================================
+// SECTION PRINCIPALE
+// ============================================
+.footer-main {
+  position: relative;
+  padding: 80px 0 60px;
+  border-bottom: 1px solid rgba($color-gold, 0.1);
+
+  @media (max-width: 1024px) {
+    padding: 60px 0 40px;
+  }
+
+  @media (max-width: 768px) {
+    padding: 40px 0;
+  }
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr 1.2fr;
+  gap: 60px;
+
+  @media (max-width: 1200px) {
+    grid-template-columns: 1.5fr 1fr 1fr;
+    gap: 40px;
+  }
+
+  @media (max-width: 992px) {
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+  }
+
+  @media (max-width: 576px) {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+}
+
+// ============================================
+// COLONNE BRAND (Logo + Description)
+// ============================================
+.footer-brand {
+  .logo-wrapper {
+    @include flex-center;
+    gap: 12px;
+    margin-bottom: 24px;
+    cursor: pointer;
+    width: fit-content;
+    @include hover-lift;
+
+    .logo-img {
+      width: 50px;
+      height: 50px;
+      object-fit: contain;
+      filter: drop-shadow(0 0 10px rgba($color-gold, 0.3));
+    }
+
+    .logo-text {
+      font-size: 24px;
+      font-weight: 700;
+      @include gold-gradient-text;
+      letter-spacing: 1px;
+    }
+  }
+
+  .brand-description {
+    font-size: 14px;
+    line-height: 1.8;
+    color: $color-text-muted;
+    margin-bottom: 28px;
+    max-width: 320px;
+  }
+
+  .social-links {
+    display: flex;
+    gap: 12px;
+
+    .social-link {
+      @include flex-center;
+      width: 44px;
+      height: 44px;
+      background: rgba($color-gold, 0.05);
+      border: 1px solid rgba($color-gold, 0.2);
+      border-radius: 12px;
+      color: $color-gold;
+      font-size: 18px;
+      transition: $transition;
+
+      &:hover {
+        background: $color-gold;
+        color: $color-bg-dark;
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba($color-gold, 0.3);
+      }
+    }
+  }
+}
+
+// ============================================
+// COLONNES STANDARD
+// ============================================
+.footer-column {
+  .column-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: $color-white;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 24px;
+    position: relative;
+    padding-bottom: 12px;
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 40px;
+      height: 2px;
+      background: linear-gradient(90deg, $color-gold, transparent);
+    }
+  }
+
+  .link-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    li {
+      width: 100%;
+    }
+  }
+
+  .footer-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 10px 0;
+    background: none;
+    border: none;
+    color: $color-text-muted;
+    font-size: 14px;
+    text-align: left;
+    cursor: pointer;
+    transition: $transition;
+
+    .link-arrow {
+      width: 16px;
+      height: 16px;
+      opacity: 0;
+      transform: translateX(-10px);
+      transition: $transition;
+      color: $color-gold;
+    }
+
+    &:hover {
+      color: $color-gold;
+      padding-left: 8px;
+
+      .link-arrow {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    // ✅ Style spécial pour Login/Profile
+    &.auth-link {
+      padding: 12px 16px;
+      background: rgba($color-gold, 0.05);
+      border: 1px solid rgba($color-gold, 0.2);
+      border-radius: 8px;
+      margin-top: 8px;
+      justify-content: space-between;
+
+      .link-content {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .auth-icon {
+        color: $color-gold;
+        font-size: 14px;
+      }
+
+      .status-dot {
+        width: 8px;
+        height: 8px;
+        background: #27ae60;
+        border-radius: 50%;
+        box-shadow: 0 0 10px #27ae60;
+        animation: pulse 2s infinite;
+      }
+
+      &.connected {
+        background: rgba(39, 174, 96, 0.1);
+        border-color: rgba(39, 174, 96, 0.3);
+        color: #27ae60;
+
+        &:hover {
+          background: rgba(39, 174, 96, 0.2);
+          border-color: rgba(39, 174, 96, 0.5);
+        }
+      }
+
+      &:hover {
+        background: rgba($color-gold, 0.1);
+        border-color: rgba($color-gold, 0.4);
+        padding-left: 16px;
+      }
+    }
+  }
+}
+
+// ============================================
+// BOUTON FOOTER LINK - TAILLE AUGMENTÉE
+// ============================================
+.button-footer-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 24px; // Augmenté de 12px 20px à 14px 24px
+  background: linear-gradient(135deg, rgba($color-gold, 0.1) 0%, rgba($color-gold, 0.05) 100%);
+  border: 2px solid rgba($color-gold, 0.3); // Bordure légèrement plus épaisse
+  border-radius: 12px; // Augmenté de 10px à 12px
+  color: $color-gold;
+  font-size: 16px; // ⬅️ AUGMENTÉ de 14px à 16px
+  font-weight: 600; // ⬅️ AUGMENTÉ de 500 à 600
+  text-decoration: none;
+  cursor: pointer;
+  transition: $transition;
+  position: relative;
+  overflow: hidden;
+
+  @media (max-width: 768px) {
+    font-size: 15px; // ⬅️ AUGMENTÉ de 13px à 15px sur mobile
+    padding: 12px 20px; // Padding ajusté pour mobile
+  }
+
+  @media (max-width: 480px) {
+    font-size: 14px; // ⬅️ AUGMENTÉ de 12px à 14px sur petits écrans
+    padding: 10px 16px;
+    width: 100%;
+    justify-content: center;
+  }
+
+  // Icône dans le bouton
+  .btn-icon {
+    font-size: 18px; // ⬅️ AUGMENTÉ de 16px à 18px
+    transition: transform 0.3s ease;
+
+    @media (max-width: 768px) {
+      font-size: 16px; // ⬅️ AUGMENTÉ de 14px à 16px
+    }
+  }
+
+  // Effet de brillance au survol
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba($color-gold, 0.2), transparent);
+    transition: left 0.5s ease;
+  }
+
+  &:hover {
+    background: linear-gradient(135deg, rgba($color-gold, 0.2) 0%, rgba($color-gold, 0.1) 100%);
+    border-color: rgba($color-gold, 0.6);
+    color: $color-gold-light;
+    transform: translateY(-3px); // Effet de levée plus prononcé
+    box-shadow: 0 8px 30px rgba($color-gold, 0.25); // Ombre plus grande
+
+    &::before {
+      left: 100%;
+    }
+
+    .btn-icon {
+      transform: translateX(4px); // Déplacement d'icône plus visible
+    }
+  }
+
+  &:active {
+    transform: translateY(-1px);
+  }
+
+  // Variante secondaire (outline)
+  &.outline {
+    background: transparent;
+    border: 2px solid rgba($color-gold, 0.4);
+
+    &:hover {
+      background: rgba($color-gold, 0.1);
+      border-color: $color-gold;
+    }
+  }
+
+  // Variante pleine (solid)
+  &.solid {
+    background: linear-gradient(135deg, $color-gold 0%, $color-gold-light 100%);
+    color: $color-bg-dark;
+    border: none;
+
+    &:hover {
+      box-shadow: 0 8px 30px rgba($color-gold, 0.4);
+      transform: translateY(-3px) scale(1.02);
+    }
+  }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+// ============================================
+// SECTION CONTACT
+// ============================================
+.contact-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.contact-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px;
+  background: rgba($color-gold, 0.03);
+  border: 1px solid rgba($color-gold, 0.1);
+  border-radius: 12px;
+  text-decoration: none;
+  color: inherit;
+  transition: $transition;
+  cursor: pointer;
+
+  &:hover {
+    background: rgba($color-gold, 0.08);
+    border-color: rgba($color-gold, 0.3);
+    transform: translateX(5px);
+
+    .contact-icon-wrapper {
+      background: $color-gold;
+      color: $color-bg-dark;
+    }
+  }
+
+  .contact-icon-wrapper {
+    @include flex-center;
+    width: 44px;
+    height: 44px;
+    background: rgba($color-gold, 0.1);
+    border-radius: 10px;
+    color: $color-gold;
+    transition: $transition;
+    flex-shrink: 0;
+
+    .contact-icon {
+      width: 20px;
+      height: 20px;
+    }
+  }
+
+  .contact-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+
+    .contact-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: $color-text-muted;
+    }
+
+    .contact-value {
+      font-size: 14px;
+      color: $color-white;
+      font-weight: 500;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+}
+
+// ============================================
+// FOOTER BOTTOM
+// ============================================
+.footer-bottom {
+  position: relative;
+  padding: 24px 0;
+  background: rgba($color-bg-dark, 0.8);
+
+  .bottom-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+
+    @media (max-width: 768px) {
+      flex-direction: column;
+      text-align: center;
+      gap: 16px;
+    }
+  }
+
+  .copyright {
+    font-size: 13px;
+    color: $color-text-muted;
+    margin: 0;
+
+    span {
+      color: $color-gold;
+      font-weight: 600;
+    }
+  }
+
+  .legal-links {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+
+    @media (max-width: 576px) {
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    button {
+      background: none;
+      border: none;
+      color: $color-text-muted;
+      font-size: 13px;
+      cursor: pointer;
+      transition: $transition;
+
+      &:hover {
+        color: $color-gold;
+      }
+    }
+
+    .separator {
+      color: rgba($color-gold, 0.3);
+    }
+  }
+}
+
+// ============================================
+// ANIMATIONS
+// ============================================
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+// ============================================
+// RESPONSIVE ADDITIONNEL
+// ============================================
+@media (max-width: 480px) {
+  .footer-brand {
+    .logo-wrapper {
+      .logo-img {
+        width: 40px;
+        height: 40px;
+      }
+      .logo-text {
+        font-size: 20px;
+      }
+    }
+
+    .brand-description {
+      font-size: 13px;
+    }
+  }
+
+  .footer-column {
+    .column-title {
+      font-size: 14px;
+    }
+
+    .footer-link {
+      font-size: 13px;
+    }
+  }
+
+  .contact-item {
+    .contact-info {
+      .contact-value {
+        font-size: 13px;
+      }
+    }
+  }
+}

@@ -1,0 +1,50 @@
+@import 'variables';
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: $bg-dark;
+  color: $text-primary;
+  line-height: 1.6;
+}
+
+.admin-layout {
+  min-height: 100vh;
+  background: $bg-dark;
+}
+
+.main-content {
+  margin-left: 260px;
+  padding: 2rem;
+  min-height: calc(100vh - 70px);
+  
+  @media (max-width: $tablet) {
+    margin-left: 0;
+    padding: 1rem;
+  }
+}
+
+// Toast Notifications
+.Toastify__toast {
+  background: $bg-card;
+  color: $text-primary;
+  border: 1px solid $gold-primary;
+  border-radius: 12px;
+  
+  &--success {
+    border-color: $success;
+  }
+  
+  &--error {
+    border-color: $error;
+  }
+}
+
+.Toastify__toast-icon {
+  color: $gold-primary;
+}

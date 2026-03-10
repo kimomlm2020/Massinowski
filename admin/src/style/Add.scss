@@ -1,0 +1,706 @@
+@import 'variables';
+
+.add-container {
+  min-height: 100vh;
+  background: $bg-dark;
+  max-width: 1200px;
+  margin: 0 auto;
+  @include responsive-padding;
+  
+  @media (min-width: $desktop) {
+    padding: 2.5rem;
+  }
+}
+
+.page-header {
+  text-align: center;
+  margin-bottom: 3rem;
+  
+  @media (max-width: $tablet) {
+    margin-bottom: 2rem;
+  }
+  
+  @media (max-width: $mobile) {
+    margin-bottom: 1.5rem;
+  }
+  
+  .header-icon-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+    animation: float 3s ease-in-out infinite;
+    
+    @media (max-width: $mobile) {
+      margin-bottom: 1rem;
+    }
+  }
+  
+  .page-title {
+    font-size: 2.25rem;
+    font-weight: 700;
+    @include gold-text;
+    margin-bottom: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    
+    @media (max-width: $tablet) {
+      font-size: 1.75rem;
+      letter-spacing: 1px;
+    }
+    
+    @media (max-width: $mobile) {
+      font-size: 1.5rem;
+    }
+  }
+  
+  .page-subtitle {
+    color: $text-secondary;
+    font-size: 1.1rem;
+    font-weight: 400;
+    
+    @media (max-width: $mobile) {
+      font-size: 0.95rem;
+    }
+  }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+}
+
+// ==========================================
+// FORM STRUCTURE
+// ==========================================
+
+.add-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  
+  @media (max-width: $mobile) {
+    gap: 1rem;
+  }
+}
+
+.form-section {
+  @include card-style;
+  padding: 2rem;
+  
+  @media (max-width: $tablet) {
+    padding: 1.5rem;
+  }
+  
+  @media (max-width: $mobile) {
+    padding: 1.25rem;
+  }
+  
+  &.image-section-compact {
+    padding: 1.5rem;
+    
+    @media (max-width: $mobile) {
+      padding: 1rem;
+    }
+  }
+  
+  .section-label {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: $text-primary;
+    margin-bottom: 1.5rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    
+    @media (max-width: $mobile) {
+      font-size: 0.9rem;
+      margin-bottom: 1.25rem;
+    }
+    
+    .gold-icon {
+      @include gold-text;
+      font-size: 1.25rem;
+    }
+    
+    .plan-icon-container {
+      flex-shrink: 0;
+    }
+    
+    .feature-count {
+      margin-left: auto;
+      color: $text-secondary;
+      font-size: 0.85rem;
+      font-weight: 500;
+      text-transform: none;
+      letter-spacing: 0;
+    }
+  }
+}
+
+// ==========================================
+// SELECTORS ROW (Category & Subcategory)
+// ==========================================
+
+.selectors-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+  
+  @media (max-width: $mobile) {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  &.two-col {
+    grid-template-columns: repeat(2, 1fr);
+    
+    @media (max-width: $mobile) {
+      grid-template-columns: 1fr;
+    }
+  }
+}
+
+// ==========================================
+// CUSTOM SELECT DROPDOWN
+// ==========================================
+
+.custom-select-wrapper {
+  position: relative;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid $gold-primary;
+    pointer-events: none;
+  }
+}
+
+.custom-select {
+  width: 100%;
+  background: $bg-dark;
+  border: 1px solid $border-color;
+  border-radius: 10px;
+  color: $text-primary;
+  padding: 1rem 3rem 1rem 1.25rem;
+  font-size: 1rem;
+  font-family: inherit;
+  cursor: pointer;
+  appearance: none;
+  transition: all 0.3s ease;
+  
+  @media (max-width: $mobile) {
+    padding: 0.875rem 2.5rem 0.875rem 1rem;
+    font-size: 0.95rem;
+  }
+  
+  &:focus {
+    outline: none;
+    border-color: $gold-primary;
+    box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.1);
+  }
+  
+  option {
+    background: $bg-dark;
+    color: $text-primary;
+    padding: 0.5rem;
+  }
+}
+
+// ==========================================
+// IMAGE UPLOAD COMPACT
+// ==========================================
+
+.image-upload-wrapper {
+  &.compact {
+    max-width: 300px;
+    margin: 0 auto;
+    
+    @media (max-width: $mobile) {
+      max-width: 250px;
+    }
+  }
+  
+  .image-upload-box {
+    display: block;
+    border: 2px dashed $border-color;
+    border-radius: 12px;
+    padding: 2rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+    background: $bg-dark;
+    
+    @media (max-width: $mobile) {
+      padding: 1.5rem;
+    }
+    
+    &:hover {
+      border-color: $gold-primary;
+      background: rgba(212, 175, 55, 0.03);
+    }
+    
+    .upload-placeholder {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      
+      &.compact {
+        gap: 0.5rem;
+        
+        .placeholder-text {
+          font-size: 0.9rem;
+        }
+        
+        .placeholder-hint {
+          font-size: 0.75rem;
+        }
+      }
+      
+      .placeholder-text {
+        font-size: 1rem;
+        color: $text-primary;
+        font-weight: 500;
+      }
+      
+      .placeholder-hint {
+        font-size: 0.85rem;
+        color: $text-secondary;
+      }
+    }
+    
+    .preview-image {
+      width: 100%;
+      max-height: 300px;
+      object-fit: cover;
+      border-radius: 8px;
+      box-shadow: $shadow-lg;
+      
+      &.compact {
+        max-height: 150px;
+        
+        @media (max-width: $mobile) {
+          max-height: 120px;
+        }
+      }
+      
+      @media (max-width: $tablet) {
+        max-height: 250px;
+      }
+      
+      @media (max-width: $mobile) {
+        max-height: 200px;
+      }
+    }
+  }
+  
+  input[type="file"] {
+    display: none;
+  }
+  
+  .remove-image-btn {
+    margin-top: 1rem;
+    padding: 0.5rem 1rem;
+    background: transparent;
+    color: $error;
+    border: 1px solid $error;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 0.85rem;
+    transition: all 0.3s ease;
+    width: 100%;
+    
+    &.small {
+      padding: 0.4rem 0.75rem;
+      font-size: 0.8rem;
+    }
+    
+    &:hover {
+      background: $error;
+      color: $text-primary;
+    }
+  }
+}
+
+// ==========================================
+// FORM INPUTS
+// ==========================================
+
+.form-grid {
+  display: grid;
+  gap: 1.5rem;
+  
+  &.two-col {
+    grid-template-columns: repeat(2, 1fr);
+    
+    @media (max-width: $tablet) {
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+    }
+  }
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+  
+  .input-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 500;
+    color: $text-secondary;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    
+    span {
+      font-size: 1.1rem;
+    }
+  }
+  
+  input[type="text"],
+  input[type="number"],
+  textarea {
+    width: 100%;
+    background: $bg-dark;
+    border: 1px solid $border-color;
+    border-radius: 10px;
+    color: $text-primary;
+    padding: 1rem 1.25rem;
+    font-size: 1rem;
+    font-family: inherit;
+    transition: all 0.3s ease;
+    
+    @media (max-width: $mobile) {
+      padding: 0.875rem 1rem;
+      font-size: 0.95rem;
+    }
+    
+    &:focus {
+      outline: none;
+      border-color: $gold-primary;
+      box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.1);
+    }
+    
+    &::placeholder {
+      color: $text-muted;
+    }
+    
+    &:read-only {
+      background: lighten($bg-dark, 5%);
+      cursor: not-allowed;
+      opacity: 0.8;
+    }
+  }
+  
+  textarea {
+    resize: vertical;
+    min-height: 120px;
+    line-height: 1.5;
+  }
+}
+
+.price-input-wrapper {
+  position: relative;
+  
+  .currency {
+    position: absolute;
+    left: 1.25rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: $gold-primary;
+    pointer-events: none;
+  }
+  
+  input {
+    padding-left: 2.75rem;
+    font-weight: 600;
+  }
+}
+
+// ==========================================
+// FEATURES EDITOR
+// ==========================================
+
+.features-editor {
+  .features-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid rgba($border-color, 0.5);
+    
+    span {
+      font-weight: 600;
+    }
+    
+    button {
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      
+      &:hover {
+        filter: brightness(1.1);
+        transform: translateY(-1px);
+      }
+    }
+  }
+}
+
+// ==========================================
+// TOGGLE SWITCH
+// ==========================================
+
+.popular-section {
+  .toggle-switch {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    cursor: pointer;
+    
+    @media (max-width: $mobile) {
+      gap: 1rem;
+    }
+    
+    input {
+      display: none;
+    }
+    
+    .toggle-slider {
+      position: relative;
+      width: 56px;
+      height: 28px;
+      background: $border-color;
+      border-radius: 14px;
+      transition: all 0.3s ease;
+      flex-shrink: 0;
+      
+      @media (max-width: $mobile) {
+        width: 50px;
+        height: 26px;
+      }
+      
+      &:before {
+        content: '';
+        position: absolute;
+        width: 24px;
+        height: 24px;
+        background: $text-primary;
+        border-radius: 50%;
+        top: 2px;
+        left: 2px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        
+        @media (max-width: $mobile) {
+          width: 22px;
+          height: 22px;
+        }
+      }
+    }
+    
+    input:checked + .toggle-slider {
+      &:before {
+        transform: translateX(28px);
+        
+        @media (max-width: $mobile) {
+          transform: translateX(24px);
+        }
+      }
+    }
+    
+    .toggle-content {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      
+      .toggle-label {
+        font-weight: 600;
+        color: $text-primary;
+        font-size: 1rem;
+        
+        @media (max-width: $mobile) {
+          font-size: 0.95rem;
+        }
+      }
+      
+      .toggle-hint {
+        font-size: 0.85rem;
+        color: $text-muted;
+        
+        @media (max-width: $mobile) {
+          font-size: 0.8rem;
+        }
+      }
+    }
+  }
+}
+
+// ==========================================
+// SUBMIT BUTTON
+// ==========================================
+
+.submit-btn {
+  width: 100%;
+  padding: 1.25rem;
+  border: none;
+  border-radius: 12px;
+  color: $bg-dark;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin-top: 0.5rem;
+  position: relative;
+  overflow: hidden;
+  
+  @media (max-width: $tablet) {
+    padding: 1.125rem;
+    font-size: 1rem;
+  }
+  
+  @media (max-width: $mobile) {
+    padding: 1rem;
+    font-size: 0.95rem;
+    letter-spacing: 1px;
+  }
+  
+  &:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.6s ease;
+  }
+  
+  &:hover:not(:disabled) {
+    transform: translateY(-3px);
+    filter: brightness(1.1);
+    
+    &:before {
+      left: 100%;
+    }
+  }
+  
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+  }
+  
+  .loading-text {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    
+    &:after {
+      content: '';
+      width: 20px;
+      height: 20px;
+      border: 2px solid $bg-dark;
+      border-top-color: transparent;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+  }
+  
+  .plan-icon-container {
+    flex-shrink: 0;
+  }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+// ==========================================
+// PLAN ICON COMPONENT
+// ==========================================
+
+.plan-icon-container {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  
+  &:hover {
+    transform: scale(1.1) rotate(5deg);
+  }
+  
+  .plan-icon-badge {
+    animation: pulse 2s infinite;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.4); }
+  50% { box-shadow: 0 0 0 8px rgba(212, 175, 55, 0); }
+}
+
+// ==========================================
+// SCROLLBAR
+// ==========================================
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: $bg-dark;
+}
+
+::-webkit-scrollbar-thumb {
+  background: $border-color;
+  border-radius: 5px;
+  border: 2px solid $bg-dark;
+  
+  &:hover {
+    background: $gold-primary;
+  }
+}
+
+// ==========================================
+// ACCESSIBILITY
+// ==========================================
+
+*:focus-visible {
+  outline: 2px solid $gold-primary;
+  outline-offset: 2px;
+}
+
+// ==========================================
+// UTILITIES
+// ==========================================
+
+.gold-icon {
+  @include gold-text;
+}

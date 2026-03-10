@@ -1,0 +1,584 @@
+// ============================================
+// VARIABLES - Thème Dark & Gold
+// ============================================
+
+// Palette Gold
+$gold-100: #fbf4a1;
+$gold-200: #f7ef8a;
+$gold-300: #e6d97a;
+$gold-400: #d4c96a;
+$gold-500: #c4b95a;
+$gold-600: #b3a84a;
+$gold-700: #8f5e25;
+$gold-800: #6b4500;
+$gold-900: #4a2f00;
+
+// Palette Dark
+$dark-100: #e8e8e8;
+$dark-200: #a0a0a0;
+$dark-300: #6b6b6b;
+$dark-400: #4a4a4a;
+$dark-500: #2a2a2a;
+$dark-600: #1a1a1a;
+$dark-700: #151515;
+$dark-800: #0d0d0d;
+$dark-900: #080808;
+
+// Variables fonctionnelles
+$primary: $gold-500;
+$primary-hover: $gold-400;
+$primary-dark: $gold-700;
+$bg-dark: $dark-800;
+$bg-card: $dark-700;
+$bg-hover: $dark-600;
+$text-primary: $dark-100;
+$text-secondary: $dark-200;
+$text-muted: $dark-300;
+$border-color: $dark-600;
+$success: #00d084;
+$warning: #f39c12;
+$danger: #ff4757;
+
+// Breakpoints
+$mobile: 480px;
+$tablet: 768px;
+$desktop: 1024px;
+$large: 1200px;
+
+// ============================================
+// MIXINS
+// ============================================
+
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin card-style {
+  background: linear-gradient(145deg, $dark-700, $dark-800);
+  border: 1px solid $border-color;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+@mixin gold-gradient-text {
+  background: linear-gradient(135deg, $gold-300, $gold-500, $gold-700);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+@mixin gold-border {
+  border: 1px solid transparent;
+  background: linear-gradient($dark-800, $dark-800) padding-box,
+              linear-gradient(135deg, $gold-700, $gold-500, $gold-700) border-box;
+}
+
+@mixin responsive($breakpoint) {
+  @media (max-width: $breakpoint) {
+    @content;
+  }
+}
+
+// ============================================
+// ANIMATIONS
+// ============================================
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse-gold {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(196, 185, 90, 0.4); }
+  50% { box-shadow: 0 0 0 10px rgba(196, 185, 90, 0); }
+}
+
+// ============================================
+// STYLES DE BASE
+// ============================================
+
+.orders-page {
+  min-height: 100vh;
+  background: linear-gradient(180deg, $dark-900 0%, $dark-800 50%, $dark-900 100%);
+  color: $text-primary;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+
+  .orders-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 110px 24px;
+    min-height: calc(100vh - 200px);
+
+    @include responsive($tablet) {
+      padding: 24px 16px;
+    }
+  }
+}
+
+// ============================================
+// TITRE DE PAGE
+// ============================================
+
+.page-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 40px;
+  text-align: center;
+  @include gold-gradient-text;
+  position: relative;
+  display: inline-block;
+  width: 100%;
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, $gold-500, transparent);
+  }
+
+  @include responsive($tablet) {
+    font-size: 1.875rem;
+    margin-bottom: 24px;
+  }
+
+  @include responsive($mobile) {
+    font-size: 1.5rem;
+  }
+}
+
+// ============================================
+// ÉTAT DE CHARGEMENT
+// ============================================
+
+.loading-state {
+  @include flex-center;
+  flex-direction: column;
+  min-height: 400px;
+  gap: 24px;
+
+  .spinner {
+    width: 60px;
+    height: 60px;
+    border: 3px solid $dark-600;
+    border-top-color: $gold-500;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  }
+
+  p {
+    color: $text-secondary;
+    font-size: 1.125rem;
+  }
+}
+
+// ============================================
+// LISTE DES COMMANDES
+// ============================================
+
+.orders-list {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  animation: fadeIn 0.6s ease-out;
+}
+
+// ============================================
+// CARTE DE COMMANDE
+// ============================================
+
+.order-card {
+  @include card-style;
+  padding: 28px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, $gold-700, $gold-500, $gold-700);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5);
+
+    &::before {
+      opacity: 1;
+    }
+  }
+
+  @include responsive($tablet) {
+    padding: 20px;
+  }
+
+  @include responsive($mobile) {
+    padding: 16px;
+  }
+}
+
+// ============================================
+// EN-TÊTE DE COMMANDE
+// ============================================
+
+.order-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid $border-color;
+
+  @include responsive($mobile) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+}
+
+.order-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.order-id {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: $gold-400;
+  font-family: 'Courier New', monospace;
+  letter-spacing: 0.5px;
+}
+
+.order-date {
+  font-size: 0.875rem;
+  color: $text-muted;
+}
+
+.order-status {
+  padding: 8px 20px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: $dark-900;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  background-color: #2a2a2a !important;
+
+  @include responsive($mobile) {
+    align-self: flex-start;
+  }
+}
+
+// ============================================
+// LISTE DES PROGRAMMES
+// ============================================
+
+.programs-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.program-item {
+  display: flex;
+  gap: 20px;
+  padding: 16px;
+  background: rgba($dark-600, 0.3);
+  border-radius: 10px;
+  border: 1px solid rgba($gold-700, 0.1);
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: rgba($dark-600, 0.5);
+    border-color: rgba($gold-500, 0.3);
+    transform: translateX(4px);
+  }
+
+  @include responsive($mobile) {
+    flex-direction: column;
+    gap: 12px;
+  }
+}
+
+.program-image-wrapper {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  flex-shrink: 0;
+  border-radius: 8px;
+  overflow: hidden;
+  @include gold-border;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+
+  &:hover img {
+    transform: scale(1.05);
+  }
+
+  .program-icon {
+    position: absolute;
+    bottom: -5px;
+    right: -5px;
+    width: 32px;
+    height: 32px;
+    @include flex-center;
+    background: $dark-800;
+    border-radius: 50%;
+    font-size: 1rem;
+    border: 2px solid $gold-500;
+  }
+
+  @include responsive($mobile) {
+    width: 100%;
+    height: 180px;
+  }
+}
+
+.program-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 10px;
+
+  h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: $text-primary;
+    margin: 0;
+
+    @include responsive($mobile) {
+      font-size: 1.125rem;
+    }
+  }
+
+  .badges {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .badge {
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+
+    &.level {
+      background: rgba($gold-700, 0.2);
+      color: $gold-300;
+      border: 1px solid $gold-700;
+    }
+
+    &.category {
+      background: rgba($dark-400, 0.5);
+      color: $text-secondary;
+    }
+  }
+
+  .price {
+    font-size: 1.375rem;
+    font-weight: 700;
+    color: $gold-400;
+    margin: 0;
+
+    &::before {
+      content: '';
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      background: $gold-500;
+      border-radius: 50%;
+      margin-right: 8px;
+      vertical-align: middle;
+    }
+  }
+}
+
+// ============================================
+// PIED DE COMMANDE
+// ============================================
+
+.order-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  background: linear-gradient(90deg, rgba($gold-700, 0.1), transparent);
+  border-radius: 8px;
+  margin-bottom: 16px;
+  border-left: 3px solid $gold-500;
+
+  @include responsive($mobile) {
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+  }
+}
+
+.payment-badge {
+  padding: 6px 16px;
+  border-radius: 16px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+
+  &.paid {
+    background: rgba($success, 0.15);
+    color: $success;
+    border: 1px solid rgba($success, 0.3);
+  }
+
+  &.pending {
+    background: rgba($warning, 0.15);
+    color: $warning;
+    border: 1px solid rgba($warning, 0.3);
+  }
+}
+
+.total {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: $gold-300;
+
+  &::before {
+    content: 'Total: ';
+    font-size: 0.875rem;
+    color: $text-muted;
+    font-weight: 400;
+    margin-right: 8px;
+  }
+
+  @include responsive($mobile) {
+    font-size: 1.25rem;
+  }
+}
+
+// ============================================
+// ADRESSE
+// ============================================
+
+.order-address {
+  padding: 16px;
+  background: $dark-800;
+  border-radius: 8px;
+  border: 1px solid $border-color;
+
+  p {
+    margin: 0;
+    color: $text-muted;
+    font-size: 0.875rem;
+    line-height: 1.6;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    &::before {
+      content: '📍';
+    }
+  }
+}
+
+// ============================================
+// ÉTAT VIDE
+// ============================================
+
+.empty-state {
+  @include flex-center;
+  flex-direction: column;
+  min-height: 400px;
+  text-align: center;
+  gap: 24px;
+  animation: fadeIn 0.6s ease-out;
+
+  h3 {
+    font-size: 1.5rem;
+    color: $text-secondary;
+    font-weight: 500;
+  }
+
+  button {
+    padding: 14px 32px;
+    background: linear-gradient(135deg, $gold-700, $gold-500);
+    color: $dark-900;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(196, 185, 90, 0.3);
+      background: linear-gradient(135deg, $gold-600, $gold-400);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+  }
+}
+
+// ============================================
+// SCROLLBAR PERSONNALISÉE
+// ============================================
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: $dark-800;
+}
+
+::-webkit-scrollbar-thumb {
+  background: $gold-700;
+  border-radius: 4px;
+
+  &:hover {
+    background: $gold-500;
+  }
+}
+
+// ============================================
+// SÉLECTION DE TEXTE
+// ============================================
+
+::selection {
+  background: rgba($gold-500, 0.3);
+  color: $text-primary;
+}

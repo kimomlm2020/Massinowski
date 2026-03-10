@@ -1,0 +1,669 @@
+// Couleurs
+$primary-color: #f7ef8a;
+$primary-dark: #d4b95a;
+$white: #ffffff;
+$white-muted: rgba(255, 255, 255, 0.8);
+$white-dim: rgba(255, 255, 255, 0.6);
+$dark-bg: #0a0a0a;
+$dark-light: #1a1a1a;
+$dark-lighter: #2a2a2a;
+
+// Dégradés
+$gradient-dark: linear-gradient(135deg, $dark-bg 0%, $dark-light 100%);
+$gradient-gold: linear-gradient(135deg, $primary-dark 0%, $primary-color 100%);
+$gradient-gold-hover: linear-gradient(135deg, $primary-color 0%, $primary-dark 100%);
+
+// Ombres
+$shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.2);
+$shadow-md: 0 4px 12px rgba(0, 0, 0, 0.3);
+$shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.4);
+$shadow-gold: 0 4px 15px rgba($primary-color, 0.3);
+$shadow-gold-hover: 0 8px 25px rgba($primary-color, 0.5);
+
+// Transitions
+$transition-fast: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+$transition-base: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+$transition-slow: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+
+// Breakpoints
+$breakpoint-mobile: 480px;
+$breakpoint-tablet: 768px;
+$breakpoint-small-tablet: 992px;
+$breakpoint-desktop: 1200px;
+
+// =============================================================================
+// MIXINS
+// =============================================================================
+
+@mixin respond-to($breakpoint) {
+  @if $breakpoint == mobile {
+    @media (max-width: #{$breakpoint-mobile}) { @content; }
+  } @else if $breakpoint == tablet {
+    @media (max-width: #{$breakpoint-tablet}) { @content; }
+  } @else if $breakpoint == small-tablet {
+    @media (max-width: #{$breakpoint-small-tablet}) { @content; }
+  } @else if $breakpoint == desktop {
+    @media (max-width: #{$breakpoint-desktop}) { @content; }
+  }
+}
+
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+@mixin glass-effect {
+  background: rgba($dark-light, 0.8);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba($primary-color, 0.1);
+  box-shadow: $shadow-lg;
+}
+
+@mixin gold-border {
+  border: 1px solid rgba($primary-color, 0.3);
+  box-shadow: 0 0 20px rgba($primary-color, 0.1);
+}
+
+@mixin gold-text {
+  color: $primary-color;
+  text-shadow: 0 0 10px rgba($primary-color, 0.3);
+}
+
+// =============================================================================
+// ANIMATIONS
+// =============================================================================
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes goldPulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba($primary-color, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba($primary-color, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba($primary-color, 0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// =============================================================================
+// STYLES COMMUNS POUR LES PAGES LÉGALES
+// =============================================================================
+
+.privacy-hero,
+.terms-hero {
+  position: relative;
+  min-height: 20vh;
+  background: $gradient-dark;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  overflow: hidden;
+  margin-top: 100px;
+  @include respond-to(tablet) {
+    min-height: 35vh;
+  }
+  
+  @include respond-to(mobile) {
+    min-height: 30vh;
+  }
+  
+  // Effet de fond avec motif
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 30% 50%, rgba($primary-color, 0.03) 0%, transparent 50%),
+                repeating-linear-gradient(45deg, rgba($primary-color, 0.02) 0px, rgba($primary-color, 0.02) 2px, transparent 2px, transparent 10px);
+    pointer-events: none;
+  }
+  
+  // Bande dorée en bas
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: $gradient-gold;
+    animation: gradientShift 5s ease infinite;
+  }
+  
+  .container {
+    position: relative;
+    z-index: 2;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    
+    @include respond-to(tablet) {
+      padding: 0 1.5rem;
+    }
+  }
+  
+  .hero-content {
+    max-width: 800px;
+    margin: 0 auto;
+    
+    h1 {
+      font-size: 3.5rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      @include gold-text;
+      letter-spacing: 2px;
+      
+      @include respond-to(tablet) {
+        font-size: 2.5rem;
+      }
+      
+      @include respond-to(mobile) {
+        font-size: 2rem;
+      }
+    }
+    
+    .last-updated {
+      color: $white-muted;
+      font-size: 1.1rem;
+      letter-spacing: 1px;
+      position: relative;
+      display: inline-block;
+      padding: 0.5rem 2rem;
+      
+      &::before,
+      &::after {
+        content: '✦';
+        color: $primary-color;
+        margin: 0 1rem;
+        opacity: 0.5;
+      }
+    }
+  }
+}
+
+// =============================================================================
+// CONTENU PRINCIPAL
+// =============================================================================
+
+.privacy-content,
+.terms-content {
+  background: $dark-bg;
+  padding: 5rem 0;
+  position: relative;
+  
+  @include respond-to(tablet) {
+    padding: 3rem 0;
+  }
+  
+  .container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    
+    @include respond-to(tablet) {
+      padding: 0 1.5rem;
+    }
+  }
+  
+  // Texte d'introduction
+  .intro-text {
+    margin-bottom: 4rem;
+    text-align: center;
+    
+    p {
+      color: $white-muted;
+      font-size: 1.3rem;
+      line-height: 1.8;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 2rem;
+      @include glass-effect;
+      border-radius: 20px;
+      border-left: 4px solid $primary-color;
+      
+      @include respond-to(tablet) {
+        font-size: 1.1rem;
+        padding: 1.5rem;
+      }
+    }
+  }
+  
+  // Sections
+  .privacy-sections,
+  .terms-sections {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    margin-bottom: 4rem;
+  }
+  
+  .privacy-section,
+  .terms-section {
+    background: $dark-light;
+    border-radius: 16px;
+    padding: 2rem;
+    transition: $transition-base;
+    border: 1px solid rgba($primary-color, 0.1);
+    position: relative;
+    overflow: hidden;
+    
+    @include respond-to(mobile) {
+      padding: 1.5rem;
+    }
+    
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 0;
+      background: $gradient-gold;
+      transition: height 0.3s ease;
+      border-radius: 4px 0 0 4px;
+    }
+    
+    &:hover {
+      transform: translateX(10px);
+      border-color: rgba($primary-color, 0.3);
+      box-shadow: $shadow-gold;
+      
+      &::before {
+        height: 100%;
+      }
+    }
+    
+    h3 {
+      color: $primary-color;
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      
+      @include respond-to(mobile) {
+        font-size: 1.3rem;
+      }
+    }
+    
+    p {
+      color: $white-muted;
+      line-height: 1.8;
+      font-size: 1rem;
+      margin: 0;
+      
+      @include respond-to(mobile) {
+        font-size: 0.95rem;
+      }
+    }
+  }
+  
+  // Section contact (pour Privacy)
+  .contact-section {
+    @include glass-effect;
+    border-radius: 24px;
+    padding: 3rem;
+    text-align: center;
+    margin-top: 3rem;
+    
+    @include respond-to(mobile) {
+      padding: 2rem;
+    }
+    
+    h3 {
+      @include gold-text;
+      font-size: 1.8rem;
+      margin-bottom: 1.5rem;
+      
+      @include respond-to(mobile) {
+        font-size: 1.5rem;
+      }
+    }
+    
+    p {
+      color: $white-muted;
+      font-size: 1.1rem;
+      margin-bottom: 2rem;
+      
+      @include respond-to(mobile) {
+        font-size: 1rem;
+      }
+    }
+    
+    .contact-methods {
+      display: flex;
+      justify-content: center;
+      gap: 3rem;
+      flex-wrap: wrap;
+      
+      p {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: rgba($primary-color, 0.1);
+        padding: 1rem 2rem;
+        border-radius: 50px;
+        transition: $transition-base;
+        border: 1px solid rgba($primary-color, 0.2);
+        
+        &:hover {
+          transform: translateY(-3px);
+          background: rgba($primary-color, 0.15);
+          border-color: $primary-color;
+          box-shadow: $shadow-gold;
+        }
+      }
+    }
+  }
+  
+  // Disclaimer médical (pour Terms)
+  .medical-disclaimer {
+    margin-top: 4rem;
+    
+    .disclaimer-warning {
+      background: linear-gradient(135deg, rgba($primary-dark, 0.1), rgba($primary-color, 0.05));
+      border: 2px solid rgba($primary-color, 0.3);
+      border-radius: 24px;
+      padding: 2.5rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      
+      &::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba($primary-color, 0.1) 0%, transparent 70%);
+        animation: rotate 20s linear infinite;
+      }
+      
+      h3 {
+        color: $primary-color;
+        font-size: 1.8rem;
+        margin-bottom: 1.5rem;
+        position: relative;
+        z-index: 1;
+        
+        @include respond-to(mobile) {
+          font-size: 1.5rem;
+        }
+      }
+      
+      p {
+        color: $white-muted;
+        font-size: 1.1rem;
+        line-height: 1.8;
+        max-width: 800px;
+        margin: 0 auto;
+        position: relative;
+        z-index: 1;
+        
+        @include respond-to(mobile) {
+          font-size: 1rem;
+        }
+      }
+    }
+  }
+}
+
+// =============================================================================
+// ÉLÉMENTS DÉCORATIFS
+// =============================================================================
+
+// Icônes de section
+.privacy-section,
+.terms-section {
+  position: relative;
+  
+  &::after {
+    content: '✦';
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    color: $primary-color;
+    opacity: 0.1;
+    font-size: 2rem;
+    transition: $transition-base;
+  }
+  
+  &:hover::after {
+    opacity: 0.3;
+    transform: rotate(90deg);
+  }
+}
+
+// Lignes décoratives
+.privacy-content,
+.terms-content {
+  position: relative;
+  
+  .container {
+    position: relative;
+    
+    &::before,
+    &::after {
+      content: '';
+      position: absolute;
+      width: 150px;
+      height: 150px;
+      background: radial-gradient(circle, rgba($primary-color, 0.03) 0%, transparent 70%);
+      border-radius: 50%;
+      z-index: 0;
+      pointer-events: none;
+    }
+    
+    &::before {
+      top: 0;
+      left: -50px;
+    }
+    
+    &::after {
+      bottom: 0;
+      right: -50px;
+    }
+  }
+}
+
+// =============================================================================
+// RESPONSIVE AVANCÉ
+// =============================================================================
+
+@media (max-width: 1400px) {
+  .privacy-content,
+  .terms-content {
+    .container {
+      max-width: 900px;
+    }
+  }
+}
+
+@media (max-width: 1200px) {
+  .privacy-content,
+  .terms-content {
+    .container {
+      max-width: 800px;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .privacy-hero,
+  .terms-hero {
+    .hero-content {
+      h1 {
+        font-size: 2.5rem;
+      }
+    }
+  }
+  
+  .privacy-content,
+  .terms-content {
+    .intro-text p {
+      font-size: 1.1rem;
+      padding: 1.5rem;
+    }
+    
+    .privacy-section,
+    .terms-section {
+      padding: 1.5rem;
+      
+      h3 {
+        font-size: 1.3rem;
+      }
+    }
+    
+    .contact-section {
+      padding: 2rem;
+      
+      .contact-methods {
+        gap: 1rem;
+        
+        p {
+          width: 100%;
+          justify-content: center;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .privacy-hero,
+  .terms-hero {
+    .hero-content {
+      h1 {
+        font-size: 2rem;
+      }
+      
+      .last-updated {
+        font-size: 0.9rem;
+        
+        &::before,
+        &::after {
+          margin: 0 0.5rem;
+        }
+      }
+    }
+  }
+  
+  .privacy-content,
+  .terms-content {
+    padding: 2rem 0;
+    
+    .intro-text p {
+      font-size: 1rem;
+      padding: 1rem;
+    }
+    
+    .privacy-section,
+    .terms-section {
+      padding: 1.2rem;
+      
+      h3 {
+        font-size: 1.2rem;
+      }
+      
+      p {
+        font-size: 0.9rem;
+      }
+    }
+    
+    .medical-disclaimer {
+      .disclaimer-warning {
+        padding: 1.5rem;
+        
+        h3 {
+          font-size: 1.3rem;
+        }
+        
+        p {
+          font-size: 0.95rem;
+        }
+      }
+    }
+  }
+}
+
+// =============================================================================
+// ACCESSIBILITÉ
+// =============================================================================
+
+.privacy-section,
+.terms-section,
+.contact-methods p {
+  &:focus-visible {
+    outline: 2px solid $primary-color;
+    outline-offset: 2px;
+  }
+}
+
+// =============================================================================
+// IMPRESSION
+// =============================================================================
+
+@media print {
+  .privacy-hero,
+  .terms-hero {
+    background: none;
+    color: black;
+    
+    &::before,
+    &::after {
+      display: none;
+    }
+    
+    h1 {
+      color: black;
+      text-shadow: none;
+    }
+  }
+  
+  .privacy-content,
+  .terms-content {
+    background: white;
+    
+    .privacy-section,
+    .terms-section {
+      border: 1px solid #ccc;
+      box-shadow: none;
+      
+      h3 {
+        color: black;
+      }
+      
+      p {
+        color: #333;
+      }
+    }
+  }
+}

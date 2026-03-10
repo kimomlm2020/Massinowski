@@ -1,0 +1,55 @@
+MONGODB_URL =mongodb+srv://massinowski:massinowskicoaching2026@cluster0.367yxyf.mongodb.net
+
+CLOUDINARY_API_KEY =928565689551653
+CLOUDINARY_SECRET_KEY =TVxqb_h6DIIA427b5c1jei0ze_Q
+CLOUDINARY_NAME =daiayrybe
+
+JWT_SECRET =Massinowski
+
+ADMIN_EMAIL =contact@massinowski.com
+ADMIN_PASSWORD =massinowskicoaching2026
+
+STRIPE_SECRET_KEY =sk_test_51T2afcRcYEnBuv34ntWJWXg663aUnoZgPVErbU6vDur7pUw8rqzt5biNOO1R3yMgUQMX0Pyt0DmuLnDJHE6gYDCX00ANaXmH5Z
+
+RAZORPAY_KEY_ID=rzp_test_votre_key_id_ici
+RAZORPAY_KEY_SECRET=votre_key_secret_ici
+MONGODB_URI=votre_mongodb_uri
+
+
+
+# Bank Details (pour virement)
+BANK_IBAN=MA64 0110 1000 0023 2030 0033 2422
+BANK_BIC=BMCEMAMC
+BANK_NAME=bank of Africa
+BANK_HOLDER=Massine Idbelkacem
+BANK_ADDRESS=Dcheira pergola - Agadir - Maroc
+
+# ==========================================
+# EMAIL - HOSTINGER (Professionnel)
+# ==========================================
+
+SMTP_HOST=smtp.hostinger.com
+SMTP_PORT=465
+SMTP_USER=contact@massinowski.com
+SMTP_PASS=Zanetake1@
+
+EMAIL_FROM=Massin Coaching <contact@massinowski.com>
+
+# ==========================================
+# ENVIRONMENT
+# ==========================================
+NODE_ENV=production
+
+
+
+# ==========================================
+# emailjs service
+# ==========================================
+VITE_EMAILJS_SERVICE_ID="service_0leb6li"
+VITE_EMAILJS_TEMPLATE_ID_BOOKING="template_y38lr0l"
+VITE_EMAILJS_PUBLIC_KEY="58mrKdIj-E-2T-bcO"
+
+# PayPal Configuration
+PAYPAL_CLIENT_ID=AbDWmU8fzxZzACYzEn7wY5nGFQOhk3oYA1-X8nIqAF2pmVwlQQfXpmV9AYLh-4LRNtn65KNpe5In_CdA
+PAYPAL_CLIENT_SECRET=EDlb2UTeNIqAGm9mpCQbFfVkEr_n1tLJ7AFXgLNymmkaLrrqLtb8ruqwP5_WAHE0mNsppzxRlpd_C1ns
+PAYPAL_MODE=live

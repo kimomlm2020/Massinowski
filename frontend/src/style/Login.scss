@@ -1,0 +1,277 @@
+// Login.scss - Dark & Gold Theme (Version simple)
+
+// Variables
+$gold: #f7ef8a;
+$gold-hover: #fff4b5;
+$bg-dark: #111111;
+$bg-card: #1a1a1a;
+$bg-input: #222222;
+$border: #333333;
+$text: #ffffff;
+$text-muted: #888888;
+$error: #ff4444;
+$success: #4caf50;
+
+// Mixins
+@mixin transition {
+  transition: all 0.3s ease;
+}
+
+// Style principal
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: $bg-dark;
+  padding: 1rem;
+}
+
+// Formulaire
+.login-form {
+  background: $bg-card;
+  padding: 2.5rem;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 400px;
+  border: 1px solid $border;
+
+  @media (max-width: 480px) {
+    padding: 1.5rem;
+  }
+}
+
+// En-tête
+.form-header {
+  text-align: center;
+  margin-bottom: 2rem;
+
+  .form-title {
+    color: $text;
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+
+    &::after {
+      content: '';
+      display: block;
+      width: 50px;
+      height: 3px;
+      background: $gold;
+      margin: 0.5rem auto 0;
+    }
+  }
+
+  .form-subtitle {
+    color: $text-muted;
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+  }
+}
+
+// Groupes
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+// Inputs
+.form-input {
+  width: 100%;
+  padding: 12px 16px;
+  background: $bg-input;
+  border: 1px solid $border;
+  border-radius: 8px;
+  font-size: 1rem;
+  color: $text;
+  @include transition;
+
+  &::placeholder {
+    color: $text-muted;
+  }
+
+  &:focus {
+    outline: none;
+    border-color: $gold;
+    box-shadow: 0 0 0 2px rgba($gold, 0.1);
+  }
+
+  &:hover:not(:disabled) {
+    border-color: rgba($gold, 0.5);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+// Actions
+.form-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 10px;
+
+  @media (max-width: 480px) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+// Lien Forgot password
+.forgot-password {
+  color: $gold;
+  cursor: pointer;
+  font-size: 0.9rem;
+  @include transition;
+
+  &:hover {
+    color: $gold-hover;
+    text-decoration: underline;
+  }
+}
+
+// Lien de bascule
+.toggle-state {
+  color: $text-muted;
+  cursor: pointer;
+  font-size: 0.9rem;
+  @include transition;
+
+  &:hover {
+    color: $gold;
+  }
+
+  @media (max-width: 480px) {
+    align-self: flex-end;
+  }
+}
+
+// Bouton retour
+.back-to-login {
+  color: $gold;
+  cursor: pointer;
+  font-size: 0.95rem;
+  margin-top: 1rem;
+  display: inline-block;
+  @include transition;
+
+  &:hover {
+    color: $gold-hover;
+    transform: translateX(-5px);
+  }
+}
+
+// Bouton submit
+.submit-btn {
+  width: 100%;
+  padding: 14px;
+  background: $gold;
+  color: $bg-dark;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  @include transition;
+
+  &:hover:not(:disabled) {
+    background: $gold-hover;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba($gold, 0.3);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  // État chargement
+  &.loading {
+    position: relative;
+    color: transparent;
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 20px;
+      height: 20px;
+      margin: -10px 0 0 -10px;
+      border: 2px solid $bg-dark;
+      border-top-color: transparent;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+  }
+}
+
+// Animation chargement
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// Messages
+.error-message {
+  color: $error;
+  font-size: 0.85rem;
+  margin-top: 5px;
+}
+
+.success-message {
+  color: $success;
+  font-size: 0.9rem;
+  text-align: center;
+  margin-top: 1rem;
+}
+
+// Loading state
+.loading-state {
+  text-align: center;
+  padding: 2rem;
+
+  .spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba($gold, 0.1);
+    border-top-color: $gold;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto 1rem;
+  }
+
+  p {
+    color: $text;
+  }
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .login-form {
+    max-width: 360px;
+    padding: 2rem;
+  }
+
+  .form-title {
+    font-size: 1.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .login-form {
+    padding: 1.5rem;
+  }
+
+  .form-title {
+    font-size: 1.5rem;
+  }
+}

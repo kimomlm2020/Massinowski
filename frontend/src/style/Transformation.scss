@@ -1,0 +1,996 @@
+// =============================================================================
+// TRANSFORMATION PAGE - DARK & GOLD THEME
+// CORRECTED: Fixed text stretching at top of page
+// =============================================================================
+
+// Variables spécifiques à la page transformation
+$trans-gold-light: #fbf4a1;
+$trans-gold: #f7ef8a;
+$trans-gold-dark: #8f5e25;
+$trans-dark: #0d0d0d;
+$trans-dark-light: #1a1a1a;
+$trans-dark-lighter: #2a2a2a;
+$trans-white: #ffffff;
+$trans-black: #000000;
+$trans-text-light: #e8e8e8;
+$trans-text-muted: #a0a0a0;
+$trans-text-dark: #333333;
+$trans-success: #00d084;
+$trans-error: #ff4757;
+$trans-info: #2196f3;
+
+// Gradients
+$trans-gradient-gold: linear-gradient(135deg, $trans-gold-dark 0%, $trans-gold 50%, $trans-gold-light 100%);
+$trans-gradient-dark: linear-gradient(135deg, $trans-dark 0%, $trans-dark-light 100%);
+$trans-gradient-overlay: linear-gradient(135deg, rgba(13, 13, 13, 0.95) 0%, rgba(26, 26, 26, 0.9) 100%);
+
+// Ombres
+$trans-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.2);
+$trans-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+$trans-shadow-lg: 0 20px 50px rgba(0, 0, 0, 0.4);
+$trans-shadow-gold: 0 8px 30px rgba(143, 94, 37, 0.3);
+$trans-shadow-gold-lg: 0 12px 50px rgba(143, 94, 37, 0.4);
+
+// Bordures
+$trans-radius-sm: 6px;
+$trans-radius: 12px;
+$trans-radius-lg: 20px;
+$trans-radius-xl: 30px;
+
+// Transitions
+$trans-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+$trans-transition-bounce: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+// Points de rupture
+$trans-mobile: 480px;
+$trans-tablet: 768px;
+$trans-desktop: 1024px;
+
+// =============================================================================
+// MIXINS SPÉCIFIQUES - CORRECTED FOR TOP-OF-PAGE BUG
+// =============================================================================
+
+@mixin trans-flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin trans-flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+// CRITICAL FIX: Force GPU composition and prevent subpixel issues at top
+@mixin trans-gold-text {
+  background: $trans-gradient-gold;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  // CRITICAL: Force pixel-perfect rendering
+  transform: translateZ(0) scale(1);
+  backface-visibility: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: geometricPrecision;
+  // Prevent any composition changes
+  will-change: auto;
+  // Ensure consistent sizing
+  transform-style: preserve-3d;
+}
+
+// =============================================================================
+// MIXIN POUR SOULIGNEMENT CENTRÉ - CORRECTED
+// =============================================================================
+
+@mixin trans-underline-center {
+  position: relative;
+  display: inline-block;
+  padding-bottom: 15px;
+  margin-bottom: 20px;
+  // CRITICAL FIX: Prevent line from stretching at top
+  transform: translateZ(0);
+  vertical-align: baseline;
+
+  &::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    // CRITICAL: Use translate3d for consistent rendering
+    transform: translate3d(-50%, 0, 0);
+    width: 80px;
+    height: 4px;
+    background: $trans-gradient-gold;
+    border-radius: 2px;
+    backface-visibility: hidden;
+  }
+}
+
+@mixin trans-underline-left {
+  position: relative;
+  display: inline-block;
+  padding-bottom: 15px;
+  margin-bottom: 20px;
+  transform: translateZ(0);
+  vertical-align: baseline;
+
+  &::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 60px;
+    height: 4px;
+    background: $trans-gradient-gold;
+    border-radius: 2px;
+    backface-visibility: hidden;
+  }
+}
+
+// =============================================================================
+// ANIMATIONS SPÉCIFIQUES - CORRECTED TO PREVENT TOP-OF-PAGE ISSUES
+// =============================================================================
+
+@keyframes transFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+// CRITICAL FIX: Use translate3d and add small offset to prevent snap at top
+@keyframes transSlideUp {
+  from {
+    opacity: 0;
+    // Start from 1px instead of 30px to prevent rendering glitch at top
+    transform: translate3d(0, 20px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes transPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+@keyframes transSpin {
+  to { transform: rotate(360deg); }
+}
+
+// CRITICAL FIX: Smaller float range to prevent composition issues
+@keyframes transFloat {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50% { transform: translate3d(0, -5px, 0); }
+}
+
+@keyframes transShimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+@keyframes transLoadingDots {
+  0%, 100% { transform: scale(1); opacity: 0.5; }
+  50% { transform: scale(1.2); opacity: 1; }
+}
+
+@keyframes transUnderlineExpand {
+  from { width: 0; }
+  to { width: 80px; }
+}
+
+// =============================================================================
+// STYLES PRINCIPAUX - CORRECTED FOR TOP-OF-PAGE RENDERING
+// =============================================================================
+
+.transformation-page {
+  background: $trans-dark;
+  color: $trans-text-light;
+  font-family: 'Inter', sans-serif;
+  min-height: 100vh;
+  position: relative;
+  // CRITICAL FIX: Prevent overflow issues at top
+  overflow-x: hidden;
+  overflow-y: auto;
+  // Font smoothing
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  // CRITICAL FIX: Add padding to account for fixed navbar (110px + 20px buffer)
+  padding-top: 130px;
+  // Ensure proper stacking
+  z-index: 1;
+  // CRITICAL: Create new composition layer
+  transform: translateZ(0);
+
+  // =========================================================================
+  // CONTAINER - CORRECTED
+  // =========================================================================
+  
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    // CRITICAL FIX: Ensure container doesn't cause composition issues
+    position: relative;
+    transform: translateZ(0);
+    
+    @media (max-width: $trans-tablet) {
+      padding: 0 16px;
+    }
+  }
+
+  // =========================================================================
+  // SPLASH SCREEN - CORRECTED
+  // =========================================================================
+  
+  .splash-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: $trans-gradient-dark;
+    z-index: 10000;
+    @include trans-flex-center;
+    flex-direction: column;
+    // CRITICAL: Isolate from page rendering
+    transform: translateZ(0);
+    backface-visibility: hidden;
+
+    .dumbbell-icon {
+      width: 80px;
+      height: 80px;
+      position: relative;
+      margin-bottom: 30px;
+      animation: transFloat 2s ease-in-out infinite;
+      transform: translateZ(0);
+      will-change: transform;
+
+      .bar {
+        width: 100%;
+        height: 20px;
+        background: $trans-gradient-gold;
+        border-radius: 10px;
+        position: relative;
+
+        &::before,
+        &::after {
+          content: '';
+          position: absolute;
+          width: 30px;
+          height: 40px;
+          background: $trans-gradient-gold;
+          border-radius: 10px;
+          top: -10px;
+        }
+
+        &::before {
+          left: -15px;
+        }
+
+        &::after {
+          right: -15px;
+        }
+      }
+    }
+
+    .splash-content {
+      text-align: center;
+
+      h1 {
+        font-size: clamp(1.8rem, 4vw, 2.5rem);
+        @include trans-gold-text;
+        margin-bottom: 1rem;
+      }
+
+      p {
+        color: $trans-text-muted;
+        font-size: 1.1rem;
+      }
+    }
+
+    .loading-dots {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin-top: 20px;
+
+      .dot {
+        width: 12px;
+        height: 12px;
+        background: $trans-gold;
+        border-radius: 50%;
+        animation: transLoadingDots 1.5s ease-in-out infinite;
+        transform: translateZ(0);
+
+        &:nth-child(2) {
+          animation-delay: 0.2s;
+        }
+
+        &:nth-child(3) {
+          animation-delay: 0.4s;
+        }
+      }
+    }
+  }
+
+  // =========================================================================
+  // HEADER - CRITICAL FIXES FOR TOP-OF-PAGE STRETCHING
+  // =========================================================================
+  
+  .page-header {
+    text-align: center;
+    // Reduced padding since we have padding-top on parent
+    padding: 40px 0 30px;
+    // CRITICAL FIX: Force block formatting context
+    display: block;
+    width: 100%;
+    // Ensure proper positioning
+    position: relative;
+    transform: translateZ(0);
+
+    h1 {
+      font-size: clamp(2rem, 5vw, 3rem);
+      @include trans-gold-text;
+      margin-bottom: 1rem;
+      // CRITICAL FIX: Remove animation that causes stretching at top
+      // Use opacity only or no animation for the gradient text
+      animation: transFadeIn 0.5s ease-out;
+      @include trans-underline-center;
+      // CRITICAL: Prevent inline-block from causing issues
+      display: block;
+      width: 100%;
+      // Ensure text doesn't wrap weirdly
+      white-space: normal;
+      word-wrap: break-word;
+      // Force consistent line height
+      line-height: 1.2;
+    }
+
+    p {
+      font-size: 1.2rem;
+      color: $trans-text-muted;
+      max-width: 600px;
+      margin: 0 auto;
+      animation: transFadeIn 0.5s ease-out 0.2s both;
+      // CRITICAL: Force proper rendering
+      transform: translateZ(0);
+    }
+  }
+
+  // =========================================================================
+  // CONTAINER PRINCIPAL
+  // =========================================================================
+  
+  .transformation-container {
+    min-height: 500px;
+    margin-bottom: 80px;
+    position: relative;
+    transform: translateZ(0);
+  }
+
+  // =========================================================================
+  // QUIZ SCREEN
+  // =========================================================================
+  
+  .quiz-screen {
+    max-width: 800px;
+    margin: 0 auto;
+    background: rgba($trans-white, 0.05);
+    border-radius: $trans-radius-lg;
+    padding: 40px;
+    border: 1px solid rgba($trans-gold-dark, 0.3);
+    box-shadow: $trans-shadow;
+    position: relative;
+    transform: translateZ(0);
+
+    @media (max-width: $trans-tablet) {
+      padding: 30px;
+    }
+
+    @media (max-width: $trans-mobile) {
+      padding: 20px;
+    }
+  }
+
+  // =========================================================================
+  // PROGRESS BAR
+  // =========================================================================
+  
+  .progress-container {
+    margin-bottom: 40px;
+
+    .progress-bar {
+      width: 100%;
+      height: 8px;
+      background: rgba($trans-white, 0.1);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 10px;
+      // CRITICAL: Prevent bar from stretching
+      transform: translateZ(0);
+
+      .progress-fill {
+        height: 100%;
+        background: $trans-gradient-gold;
+        transition: width 0.5s ease;
+        border-radius: 4px;
+        transform: translateZ(0);
+      }
+    }
+
+    .progress-text {
+      text-align: right;
+      color: $trans-text-muted;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+  }
+
+  // =========================================================================
+  // QUESTION CARD
+  // =========================================================================
+  
+  .question-card {
+    margin-bottom: 40px;
+
+    h2 {
+      font-size: 1.8rem;
+      color: $trans-white;
+      margin-bottom: 30px;
+      font-weight: 600;
+      line-height: 1.3;
+      text-align: center;
+      @include trans-underline-center;
+      // CRITICAL: Prevent stretching
+      display: block;
+      width: 100%;
+      transform: translateZ(0);
+
+      @media (max-width: $trans-tablet) {
+        font-size: 1.5rem;
+      }
+    }
+  }
+
+  // =========================================================================
+  // INPUT FIELDS
+  // =========================================================================
+  
+  .input-field {
+    width: 100%;
+    padding: 15px 20px;
+    background: rgba($trans-white, 0.05);
+    border: 2px solid rgba($trans-gold-dark, 0.3);
+    border-radius: $trans-radius;
+    color: $trans-white;
+    font-size: 1rem;
+    transition: $trans-transition;
+    transform: translateZ(0);
+    -webkit-font-smoothing: antialiased;
+
+    &:focus {
+      outline: none;
+      border-color: $trans-gold;
+      box-shadow: 0 0 0 3px rgba($trans-gold, 0.2);
+    }
+
+    &::placeholder {
+      color: $trans-text-muted;
+    }
+  }
+
+  // =========================================================================
+  // OPTIONS GRID
+  // =========================================================================
+  
+  .options-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+
+    @media (max-width: $trans-mobile) {
+      grid-template-columns: 1fr;
+    }
+
+    .option-button {
+      padding: 15px 20px;
+      background: rgba($trans-white, 0.05);
+      border: 2px solid rgba($trans-gold-dark, 0.3);
+      border-radius: $trans-radius;
+      color: $trans-text-light;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: $trans-transition-bounce;
+      text-align: left;
+      transform: translateZ(0);
+      backface-visibility: hidden;
+      -webkit-font-smoothing: antialiased;
+      // CRITICAL: Prevent button text from stretching
+      white-space: normal;
+
+      &:hover {
+        background: rgba($trans-gold, 0.1);
+        border-color: $trans-gold;
+      }
+
+      &.selected {
+        background: $trans-gradient-gold;
+        color: $trans-black;
+        border-color: $trans-gold-light;
+      }
+    }
+  }
+
+  // =========================================================================
+  // NAVIGATION BUTTONS
+  // =========================================================================
+  
+  .navigation-buttons {
+    display: flex;
+    gap: 15px;
+    justify-content: space-between;
+
+    .btn {
+      flex: 1;
+      padding: 15px 30px;
+      border-radius: $trans-radius;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: $trans-transition-bounce;
+      border: none;
+      text-align: center;
+      transform: translateZ(0);
+      backface-visibility: hidden;
+      -webkit-font-smoothing: antialiased;
+
+      @media (max-width: $trans-mobile) {
+        padding: 12px 20px;
+      }
+
+      &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      &-primary {
+        background: $trans-gradient-gold;
+        color: $trans-black;
+        box-shadow: $trans-shadow-gold;
+
+        &:hover:not(:disabled) {
+          transform: translateY(-2px) translateZ(0);
+          box-shadow: $trans-shadow-gold-lg;
+        }
+      }
+
+      &-secondary {
+        background: transparent;
+        color: $trans-gold;
+        border: 2px solid $trans-gold;
+
+        &:hover {
+          background: $trans-gradient-gold;
+          color: $trans-black;
+          border-color: transparent;
+        }
+      }
+    }
+  }
+
+  // =========================================================================
+  // RESULT SCREEN
+  // =========================================================================
+  
+  .result-screen,
+  .success-screen {
+    max-width: 800px;
+    margin: 0 auto;
+    background: rgba($trans-white, 0.05);
+    border-radius: $trans-radius-lg;
+    padding: 50px;
+    border: 1px solid rgba($trans-gold-dark, 0.3);
+    box-shadow: $trans-shadow-lg;
+    position: relative;
+    transform: translateZ(0);
+
+    @media (max-width: $trans-tablet) {
+      padding: 30px;
+    }
+  }
+
+  .success-header {
+    text-align: center;
+    margin-bottom: 40px;
+
+    .success-icon {
+      font-size: 4rem;
+      margin-bottom: 20px;
+      animation: transFloat 2s ease-in-out infinite;
+      display: inline-block;
+      transform: translateZ(0);
+    }
+
+    h2 {
+      font-size: 2rem;
+      @include trans-gold-text;
+      margin-bottom: 15px;
+      @include trans-underline-center;
+      display: block;
+      width: 100%;
+    }
+
+    p {
+      color: $trans-text-muted;
+      font-size: 1.1rem;
+    }
+  }
+
+  // =========================================================================
+  // PROGRAM SUMMARY
+  // =========================================================================
+  
+  .programme-summary {
+    background: rgba($trans-gold-dark, 0.1);
+    border-radius: $trans-radius;
+    padding: 30px;
+    margin-bottom: 30px;
+    border: 1px solid rgba($trans-gold, 0.2);
+    transform: translateZ(0);
+
+    h3 {
+      color: $trans-gold;
+      margin-bottom: 30px;
+      font-size: 1.3rem;
+      text-align: center;
+      @include trans-underline-center;
+      display: block;
+      width: 100%;
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+
+      @media (max-width: $trans-mobile) {
+        grid-template-columns: 1fr;
+      }
+
+      .summary-item {
+        background: rgba($trans-dark-lighter, 0.5);
+        padding: 15px;
+        border-radius: $trans-radius;
+        border: 1px solid rgba($trans-gold, 0.1);
+
+        strong {
+          display: block;
+          color: $trans-gold;
+          font-size: 0.9rem;
+          margin-bottom: 5px;
+          text-transform: uppercase;
+          letter-spacing: 1px;
+        }
+
+        span {
+          color: $trans-white;
+          font-size: 1.1rem;
+          font-weight: 500;
+        }
+      }
+    }
+  }
+
+  // =========================================================================
+  // ACTION BUTTONS
+  // =========================================================================
+  
+  .action-buttons {
+    display: flex;
+    gap: 20px;
+    margin-top: 30px;
+
+    @media (max-width: $trans-tablet) {
+      flex-direction: column;
+    }
+
+    .btn {
+      flex: 1;
+      padding: 15px 25px;
+      border-radius: $trans-radius;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: $trans-transition-bounce;
+      border: none;
+      @include trans-flex-center;
+      gap: 10px;
+      transform: translateZ(0);
+      backface-visibility: hidden;
+
+      &-gold {
+        background: $trans-gradient-gold;
+        color: $trans-black;
+        box-shadow: $trans-shadow-gold;
+
+        &:hover {
+          transform: translateY(-2px) translateZ(0);
+          box-shadow: $trans-shadow-gold-lg;
+        }
+
+        &.loading {
+          opacity: 0.8;
+          cursor: wait;
+        }
+      }
+
+      &-outline {
+        background: transparent;
+        color: $trans-gold;
+        border: 2px solid $trans-gold;
+
+        &:hover {
+          background: $trans-gradient-gold;
+          color: $trans-black;
+          border-color: transparent;
+        }
+      }
+    }
+  }
+
+  // =========================================================================
+  // GLOBAL BUTTON STYLES
+  // =========================================================================
+  
+  .btn {
+    &-whatsapp {
+      background: #25D366;
+      color: $trans-white;
+      box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
+      padding: 15px 30px;
+      border-radius: $trans-radius;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: $trans-transition-bounce;
+      border: none;
+      text-align: center;
+      display: inline-block;
+      transform: translateZ(0);
+
+      &:hover {
+        transform: translateY(-2px) translateZ(0);
+        box-shadow: 0 8px 25px rgba(37, 211, 102, 0.4);
+      }
+    }
+
+    &-secondary {
+      background: rgba($trans-white, 0.1);
+      color: $trans-text-light;
+      padding: 15px 30px;
+      border-radius: $trans-radius;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: $trans-transition-bounce;
+      border: 2px solid rgba($trans-gold, 0.3);
+      text-align: center;
+      display: inline-block;
+      transform: translateZ(0);
+
+      &:hover {
+        background: rgba($trans-white, 0.2);
+        border-color: $trans-gold;
+      }
+    }
+  }
+
+  // =========================================================================
+  // ADDITIONAL ACTIONS
+  // =========================================================================
+  
+  .additional-actions {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-top: 30px;
+
+    @media (max-width: $trans-tablet) {
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .btn {
+      min-width: 200px;
+    }
+  }
+
+  // =========================================================================
+  // SPINNER
+  // =========================================================================
+  
+  .spinner {
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba($trans-black, 0.3);
+    border-top-color: $trans-black;
+    border-radius: 50%;
+    animation: transSpin 0.8s linear infinite;
+    transform: translateZ(0);
+  }
+
+  // =========================================================================
+  // STATUS MESSAGES
+  // =========================================================================
+  
+  .status-message {
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: $trans-radius;
+    text-align: center;
+    font-weight: 500;
+
+    &.success {
+      background: rgba($trans-success, 0.1);
+      color: $trans-success;
+      border: 1px solid rgba($trans-success, 0.3);
+    }
+
+    &.error {
+      background: rgba($trans-error, 0.1);
+      color: $trans-error;
+      border: 1px solid rgba($trans-error, 0.3);
+    }
+
+    &.info {
+      background: rgba($trans-info, 0.1);
+      color: $trans-info;
+      border: 1px solid rgba($trans-info, 0.3);
+    }
+  }
+
+  // =========================================================================
+  // SUCCESS SCREEN
+  // =========================================================================
+  
+  .success-content {
+    text-align: center;
+
+    .success-animation {
+      font-size: 5rem;
+      margin-bottom: 30px;
+      animation: transFloat 2s ease-in-out infinite;
+      display: inline-block;
+      transform: translateZ(0);
+    }
+
+    h2 {
+      font-size: 2.5rem;
+      @include trans-gold-text;
+      margin-bottom: 20px;
+      @include trans-underline-center;
+      display: block;
+      width: 100%;
+    }
+
+    p {
+      color: $trans-text-muted;
+      font-size: 1.1rem;
+      margin-bottom: 10px;
+    }
+
+    .email-highlight {
+      color: $trans-gold;
+      font-size: 1.3rem;
+      font-weight: 600;
+      padding: 10px 20px;
+      background: rgba($trans-gold-dark, 0.1);
+      border-radius: $trans-radius;
+      display: inline-block;
+      margin: 15px 0;
+    }
+
+    .success-note {
+      color: $trans-text-muted;
+      font-style: italic;
+      margin-bottom: 30px;
+    }
+  }
+
+  // =========================================================================
+  // MENU OVERLAY
+  // =========================================================================
+  
+  .menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba($trans-black, 0.5);
+    backdrop-filter: blur(5px);
+    z-index: 999;
+    transform: translateZ(0);
+  }
+
+  // =========================================================================
+  // RESPONSIVE ADJUSTMENTS
+  // =========================================================================
+  
+  @media (max-width: $trans-tablet) {
+    .transformation-container {
+      margin-bottom: 60px;
+    }
+  }
+
+  @media (max-width: $trans-mobile) {
+    padding-top: 100px;
+    
+    .page-header {
+      padding: 30px 0 20px;
+      
+      h1 {
+        font-size: 1.8rem;
+      }
+      
+      p {
+        font-size: 1rem;
+      }
+    }
+  }
+}
+
+// =============================================================================
+// ACCESSIBILITÉ
+// =============================================================================
+
+@media (prefers-reduced-motion: reduce) {
+  .transformation-page *,
+  .transformation-page *::before,
+  .transformation-page *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+// Support pour le focus visible
+.transformation-page {
+  button:focus-visible,
+  input:focus-visible {
+    outline: 3px solid $trans-gold;
+    outline-offset: 2px;
+  }
+}
+
+// =============================================================================
+// CRITICAL FIX: OVERRIDE FOR NAVBAR CONFLICT
+// Add this to your main styles or navbar.scss
+// =============================================================================
+
+// This ensures the navbar doesn't cause composition issues with page content
+.navbar {
+  // Ensure navbar is properly isolated
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  
+  // If using backdrop-filter, ensure it doesn't affect content below
+  &.scrolled {
+    // Force new composition layer when scrolled
+    will-change: transform;
+  }
+}
+
+// Ensure body doesn't have conflicting scroll behavior
+body.has-transformation-page {
+  // Prevent scroll bounce on macOS/iOS that can cause rendering issues
+  overscroll-behavior-y: none;
+  
+  // Ensure proper stacking
+  position: relative;
+}

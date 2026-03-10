@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Basic -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Primary SEO -->
+    <title>Massinowski Coaching | Personal Trainer & Mental Coaching</title>
+    <meta
+      name="description"
+      content="Massinowski Coaching - Certified personal trainer offering customized fitness programs, nutrition planning and mental coaching for body transformation."
+    />
+    <meta name="keywords" content="personal trainer, fitness coach, nutrition coach, mental coaching, body transformation" />
+    <meta name="author" content="Massinowski Coaching" />
+    <meta name="robots" content="index, follow" />
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://massinowski.com/" />
+
+    <!-- Favicon (mettre le fichier dans /public/favicon.png) -->
+    <link rel="icon" type="image/png" href="/src/assets/favicon.png" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://massinowski.com/" />
+    <meta property="og:title" content="Massinowski Coaching | Fitness & Mental Transformation" />
+    <meta
+      property="og:description"
+      content="Customized fitness, nutrition and mindset coaching to transform your body and life."
+    />
+    <meta property="og:image" content="https://massinowski.com/og-image.jpg" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Massinowski Coaching" />
+    <meta name="twitter:description" content="Personal training and mental transformation coaching." />
+    <meta name="twitter:image" content="https://massinowski.com/og-image.jpg" />
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "ProfessionalService",
+        "name": "Massinowski Coaching",
+        "url": "https://massinowski.com",
+        "logo": "https://massinowski.com/logo.png",
+        "description": "Certified personal trainer offering customized fitness programs, nutrition plans and mental coaching.",
+        "areaServed": "Worldwide",
+        "founder": "Massinowski",
+        "foundingDate": "2022",
+        "sameAs": [
+          "https://www.instagram.com/massinowski/",
+          "https://www.facebook.com/massinowski/",
+          "https://www.youtube.com/@massinowski"
+        ]
+      }
+    </script>
+  </head>
+
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+
+    <!-- React entry -->
+    <script type="module" src="/src/main.jsx"></script>
+
+    <!-- Title Scroll Animation (Marketing effect) -->
+    <script>
+      const baseTitle =
+        "Massinowski Coaching | Personal Trainer & Mental Coaching";
+
+      const scrollText =
+        "🔥 Come Back — Start Your Transformation Today 💪   ";
+
+      let position = 0;
+      let interval;
+
+      function startScroll() {
+        interval = setInterval(() => {
+          document.title =
+            scrollText.substring(position) +
+            scrollText.substring(0, position);
+          position = (position + 1) % scrollText.length;
+        }, 150);
+      }
+
+      function stopScroll() {
+        clearInterval(interval);
+        document.title = baseTitle;
+      }
+
+      document.addEventListener("visibilitychange", () => {
+        if (document.hidden) {
+          startScroll();
+        } else {
+          stopScroll();
+        }
+      });
+    </script>
+  </body>
+</html>

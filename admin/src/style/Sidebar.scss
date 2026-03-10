@@ -1,0 +1,120 @@
+@import 'variables';
+
+.sidebar {
+  width: 260px;
+  background: $bg-card;
+  border-right: 1px solid $border-color;
+  min-height: calc(100vh - 70px);
+  position: fixed;
+  left: 0;
+  top: 120px;
+  padding: 1.5rem 0;
+  transition: transform 0.3s ease;
+  
+  @media (max-width: $tablet) {
+    transform: translateX(-100%);
+    z-index: 90;
+    width: 280px;
+    
+    &.open {
+      transform: translateX(0);
+    }
+  }
+  
+  .sidebar-links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0 1rem;
+    
+    a {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem 1.25rem;
+      color: $text-secondary;
+      text-decoration: none;
+      border-radius: 10px;
+      transition: all 0.3s ease;
+      border: 1px solid transparent;
+      
+      img {
+        width: 24px;
+        height: 24px;
+        filter: grayscale(100%) brightness(0.7);
+        transition: all 0.3s ease;
+      }
+      
+      p {
+        font-weight: 500;
+        font-size: 0.95rem;
+      }
+      
+      &:hover {
+        background: $bg-hover;
+        color: $text-primary;
+        
+        img {
+          filter: grayscale(0%) brightness(1);
+        }
+      }
+      
+      &.active {
+        @include gold-gradient;
+        color: $bg-dark;
+        box-shadow: $shadow;
+        
+        img {
+          filter: brightness(0) saturate(100%) invert(10%);
+        }
+      }
+    }
+  }
+}
+
+.mobile-menu-toggle {
+  display: none;
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  width: 56px;
+  height: 56px;
+  @include gold-gradient;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  z-index: 100;
+  box-shadow: 0 4px 20px rgba(212, 175, 55, 0.4);
+  
+  @media (max-width: $tablet) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  svg {
+    width: 24px;
+    height: 24px;
+    color: $bg-dark;
+  }
+}
+
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.8);
+  z-index: 80;
+  
+  @media (max-width: $tablet) {
+    display: block;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    
+    &.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+  }
+}

@@ -1,0 +1,44 @@
+@import 'variables';
+
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  @include responsive-padding;
+  background: $bg-card;
+  border-bottom: 2px solid $gold-primary;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  
+  img {
+    height: 90px;
+    width: auto;
+    filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.3));
+    
+    @media (max-width: $mobile) {
+      height: 60px;
+    }
+  }
+  
+  button {
+    padding: 0.5rem 1.5rem;
+    background: transparent;
+    color: $gold-primary;
+    border: 2px solid $gold-primary;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    
+    &:hover {
+      @include gold-gradient;
+      color: $bg-dark;
+    }
+    
+    @media (max-width: $mobile) {
+      padding: 0.4rem 1rem;
+      font-size: 0.875rem;
+    }
+  }
+}

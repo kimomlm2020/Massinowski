@@ -1,0 +1,60 @@
+// Dark & Gold Theme Variables
+$bg-dark: #0a0a0a;
+$bg-card: #141414;
+$bg-hover: #1a1a1a;
+$gold-primary: #D4AF37;
+$gold-light: #F4D03F;
+$gold-dark: #B8860B;
+$text-primary: #ffffff;
+$text-secondary: #a0a0a0;
+$text-muted: #666666;
+$border-color: #2a2a2a;
+$success: #22c55e;
+$error: #ef4444;
+$shadow: 0 4px 20px rgba(212, 175, 55, 0.1);
+$shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.5);
+
+// Breakpoints
+$mobile: 480px;
+$tablet: 768px;
+$desktop: 1024px;
+
+// Mixins
+@mixin gold-gradient {
+  background: linear-gradient(135deg, $gold-dark 0%, $gold-primary 50%, $gold-light 100%);
+}
+
+@mixin gold-text {
+  background: linear-gradient(135deg, $gold-light 0%, $gold-primary 50%, $gold-dark 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+@mixin card-style {
+  background: $bg-card;
+  border: 1px solid $border-color;
+  border-radius: 12px;
+  box-shadow: $shadow;
+}
+
+@mixin button-gold {
+  @include gold-gradient;
+  color: $bg-dark;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(212, 175, 55, 0.3);
+  }
+}
+
+@mixin responsive-padding {
+  padding: 1.5rem;
+  @media (max-width: $tablet) { padding: 1rem; }
+  @media (max-width: $mobile) { padding: 0.75rem; }
+}

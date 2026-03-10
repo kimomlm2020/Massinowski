@@ -1,0 +1,802 @@
+// ============================================
+// VARIABLES
+// ============================================
+$bg-dark: #0a0a0a;
+$bg-card: #141414;
+$bg-hover: #1a1a1a;
+$gold: #d4af37;
+$gold-light: #f4d03f;
+$text-primary: #ffffff;
+$text-secondary: #a0a0a0;
+$text-muted: #666666;
+$border: #2a2a2a;
+$success: #22c55e;
+$warning: #f59e0b;
+$error: #ef4444;
+
+// Hauteurs fixes pour le calcul des espacements
+$navbar-height: 70px;
+$footer-height: 60px;
+
+// ============================================
+// MIXINS
+// ============================================
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin btn-base {
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  font-weight: 500;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+  border: none;
+  outline: none;
+  
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+// ============================================
+// RESET POUR LA PAGE PROFILE UNIQUEMENT
+// ============================================
+.profile-page {
+  min-height: 100vh;
+  background-color: $bg-dark;
+  color: $text-primary;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  // Padding bottom augmenté pour éviter que le footer ne colle au contenu
+  padding-bottom: calc(#{$footer-height} + 2rem);
+  overflow-x: hidden;
+  position: relative;
+  
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+}
+
+// ============================================
+// LOADING
+// ============================================
+.loading-container {
+  @include flex-center;
+  flex-direction: column;
+  // Hauteur ajustée pour tenir compte de la navbar et du footer
+  min-height: calc(100vh - #{$navbar-height} - #{$footer-height} - 4rem);
+  gap: 1rem;
+
+  .spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid $border;
+    border-top-color: $gold;
+    border-radius: 50%;
+    animation: spin 1.5s linear infinite;
+    will-change: transform;
+  }
+
+  p {
+    color: $text-secondary;
+    font-size: 0.875rem;
+    margin: 0;
+  }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+// ============================================
+// LAYOUT STABLE - Espacement navbar corrigé
+// ============================================
+.profile-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  // Padding top augmenté pour descendre le contenu sous la navbar
+  padding: calc(#{$navbar-height} + 2rem) 1rem 2rem;
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 2rem;
+  // Minimum height pour éviter le collage au footer
+  min-height: calc(100vh - #{$navbar-height} - #{$footer-height} - 4rem);
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    padding: calc(#{$navbar-height} + 1rem) 1rem 2rem;
+  }
+}
+
+// ============================================
+// SIDEBAR - Position fixe avec espacement correct
+// ============================================
+.profile-sidebar {
+  background-color: $bg-card;
+  border: 1px solid $border;
+  border-radius: 8px;
+  padding: 1.5rem;
+  height: fit-content;
+  align-self: start;
+  // Position sticky au lieu de relative avec top fixe
+  position: sticky;
+  // Top calculé pour être sous la navbar avec un espace
+  top: calc(#{$navbar-height} + 2rem);
+  // Maximum height pour éviter de dépasser le footer
+  max-height: calc(100vh - #{$navbar-height} - #{$footer-height} - 4rem);
+  overflow-y: auto;
+  // Scrollbar stylisée
+  scrollbar-width: thin;
+  scrollbar-color: $border $bg-dark;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: $bg-dark;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: $border;
+    border-radius: 3px;
+  }
+
+  @media (max-width: 768px) {
+    position: relative;
+    top: 0;
+    max-height: none;
+    text-align: center;
+  }
+}
+
+.profile-avatar {
+  width: 100px;
+  height: 100px;
+  margin: 0 auto 1rem;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid $gold;
+  box-shadow: 0 4px 12px rgba($gold, 0.15);
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+}
+
+.profile-sidebar h2 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  text-align: center;
+  margin: 0 0 0.25rem 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.user-email {
+  color: $text-secondary;
+  font-size: 0.875rem;
+  text-align: center;
+  word-break: break-all;
+  margin: 0 0 0.5rem 0;
+  min-height: 1.2em;
+}
+
+.member-since {
+  color: $text-muted;
+  font-size: 0.75rem;
+  text-align: center;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid $border;
+  margin: 0 0 1rem 0;
+  min-height: 1.2em;
+}
+
+// ============================================
+// MENU
+// ============================================
+.profile-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  button {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    border-radius: 4px;
+    border: 1px solid transparent;
+    background: transparent;
+    color: $text-secondary;
+    font-size: 0.875rem;
+    cursor: pointer;
+    width: 100%;
+    text-align: left;
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+    min-height: 44px;
+
+    &:hover {
+      background-color: $bg-hover;
+      color: $text-primary;
+    }
+
+    &.active {
+      background-color: rgba($gold, 0.1);
+      color: $gold;
+      border-color: rgba($gold, 0.3);
+    }
+
+    .badge {
+      margin-left: auto;
+      background-color: $gold;
+      color: $bg-dark;
+      font-size: 0.75rem;
+      padding: 0.125rem 0.5rem;
+      border-radius: 999px;
+      font-weight: 600;
+      min-width: 24px;
+      text-align: center;
+    }
+
+    &.logout-btn {
+      margin-top: 0.5rem;
+      color: $error;
+
+      &:hover {
+        background-color: rgba($error, 0.1);
+        border-color: rgba($error, 0.3);
+      }
+    }
+  }
+}
+
+// ============================================
+// CONTENT
+// ============================================
+.profile-content {
+  position: relative;
+  min-height: 400px;
+  contain: layout style paint;
+}
+
+.loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba($bg-dark, 0.9);
+  @include flex-center;
+  z-index: 100;
+  border-radius: 8px;
+
+  .spinner {
+    width: 36px;
+    height: 36px;
+    border: 3px solid $border;
+    border-top-color: $gold;
+    border-radius: 50%;
+    animation: spin 1.5s linear infinite;
+    will-change: transform;
+  }
+}
+
+// ============================================
+// SECTIONS
+// ============================================
+.profile-section {
+  background-color: $bg-card;
+  border: 1px solid $border;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem; // Augmenté pour plus d'espacement
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  h3 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin: 0 0 1.5rem 0;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid $border;
+    min-height: 2.5rem;
+    line-height: 1.5;
+    color: #d4af37;
+  }
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid $border;
+  flex-wrap: nowrap;
+  gap: 1rem;
+
+  h3 {
+    margin: 0;
+    border: none;
+    padding: 0;
+    min-height: auto;
+  }
+}
+
+// ============================================
+// BOUTONS
+// ============================================
+.btn-gold {
+  @include btn-base;
+  background-color: $gold;
+  color: $bg-dark;
+  font-weight: 600;
+  box-shadow: none;
+
+  &:hover:not(:disabled) {
+    background-color: $gold-light;
+  }
+}
+
+.btn-dark {
+  @include btn-base;
+  background-color: $bg-hover;
+  color: $text-primary;
+  border: 1px solid $border;
+
+  &:hover:not(:disabled) {
+    background-color: #252525;
+    border-color: $text-secondary;
+  }
+}
+
+// ============================================
+// FORMULAIRES
+// ============================================
+.profile-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.form-group {
+  min-height: 80px;
+  
+  label {
+    display: block;
+    font-size: 0.875rem;
+    color: $text-secondary;
+    margin-bottom: 0.5rem;
+    min-height: 1.2em;
+  }
+
+  &.required label::after {
+    content: ' *';
+    color: $gold;
+  }
+
+  input {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: $bg-dark;
+    border: 1px solid $border;
+    border-radius: 4px;
+    color: $text-primary;
+    font-size: 0.875rem;
+    height: 44px;
+    resize: none;
+
+    &:focus {
+      outline: none;
+      border-color: $gold;
+    }
+
+    &.disabled {
+      background-color: $bg-hover;
+      color: $text-muted;
+      cursor: not-allowed;
+    }
+
+    &::placeholder {
+      color: $text-muted;
+    }
+  }
+
+  small {
+    display: block;
+    margin-top: 0.375rem;
+    font-size: 0.75rem;
+    color: $text-muted;
+    min-height: 1em;
+  }
+}
+
+.address-section {
+  padding-top: 1rem;
+  border-top: 1px solid $border;
+
+  h4 {
+    font-size: 0.875rem;
+    color: $text-secondary;
+    margin: 0 0 1rem 0;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    min-height: 1.2em;
+  }
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+
+  @media (max-width: 480px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.form-actions {
+  display: flex;
+  gap: 0.75rem;
+  padding-top: 1rem;
+  border-top: 1px solid $border;
+  flex-wrap: nowrap;
+}
+
+// ============================================
+// INFO DISPLAY
+// ============================================
+.info-display {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.info-row {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 1rem;
+  padding: 0.75rem;
+  background-color: $bg-dark;
+  border-radius: 4px;
+  border: 1px solid $border;
+  min-height: 50px;
+  align-items: center;
+
+  @media (max-width: 480px) {
+    grid-template-columns: 1fr;
+    gap: 0.25rem;
+    align-items: start;
+  }
+
+  span {
+    color: $text-muted;
+    font-size: 0.875rem;
+    white-space: nowrap;
+  }
+
+  p {
+    color: $text-primary;
+    font-size: 0.9375rem;
+    margin: 0;
+    word-break: break-word;
+    overflow-wrap: break-word;
+  }
+}
+
+// ============================================
+// ORDERS
+// ============================================
+.empty-state {
+  text-align: center;
+  padding: 3rem 1rem;
+
+  .empty-icon {
+    font-size: 3rem;
+    line-height: 1;
+    opacity: 0.5;
+    margin-bottom: 1rem;
+  }
+
+  p {
+    color: $text-secondary;
+    margin: 0 0 1.5rem 0;
+  }
+}
+
+.orders-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.order-card {
+  background-color: $bg-dark;
+  border: 1px solid $border;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.order-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background-color: rgba($gold, 0.05);
+  border-bottom: 1px solid $border;
+  min-height: 60px;
+  gap: 1rem;
+
+  @media (max-width: 480px) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  > div {
+    flex-shrink: 0;
+  }
+
+  .order-id {
+    font-weight: 600;
+    color: $gold;
+    display: block;
+    font-size: 0.875rem;
+  }
+
+  .order-date {
+    font-size: 0.75rem;
+    color: $text-muted;
+    display: block;
+    margin-top: 0.25rem;
+  }
+
+  .order-status {
+    padding: 0.375rem 0.75rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: capitalize;
+    background-color: rgba($warning, 0.1);
+    color: $warning;
+    white-space: nowrap;
+    flex-shrink: 0;
+
+    &.completed, &.delivered {
+      background-color: rgba($success, 0.1);
+      color: $success;
+    }
+
+    &.cancelled {
+      background-color: rgba($error, 0.1);
+      color: $error;
+    }
+  }
+}
+
+.order-items {
+  padding: 1rem;
+}
+
+.order-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid $border;
+  min-height: 60px;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  .item-icon {
+    font-size: 1.25rem;
+    width: 36px;
+    height: 36px;
+    @include flex-center;
+    background-color: $bg-card;
+    border-radius: 4px;
+    flex-shrink: 0;
+  }
+
+  .item-details {
+    flex: 1;
+    min-width: 0;
+
+    .item-name {
+      font-weight: 500;
+      margin: 0 0 0.25rem 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .item-meta {
+      font-size: 0.75rem;
+      color: $text-muted;
+      margin: 0;
+    }
+  }
+
+  .item-price {
+    font-weight: 600;
+    color: $gold;
+    flex-shrink: 0;
+    font-size: 0.9375rem;
+  }
+}
+
+.order-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background-color: $bg-card;
+  border-top: 1px solid $border;
+  font-size: 0.875rem;
+  min-height: 50px;
+  gap: 1rem;
+
+  .payment-status {
+    flex-shrink: 0;
+    
+    &.paid { color: $success; }
+    &.pending { color: $warning; }
+  }
+
+  .order-total {
+    flex-shrink: 0;
+    white-space: nowrap;
+    
+    strong {
+      color: $gold;
+      font-size: 1.125rem;
+      margin-left: 0.5rem;
+    }
+  }
+}
+
+// ============================================
+// FOOTER SPACING FIX
+// ============================================
+// Si vous avez un footer fixe ou sticky, ajoutez cette classe
+.footer-spacer {
+  height: calc(#{$footer-height} + 2rem);
+  width: 100%;
+  pointer-events: none;
+}
+
+// Styles pour la gestion de l'avatar
+.profile-avatar-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.profile-avatar {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  overflow: hidden;
+  cursor: pointer;
+  border: 3px solid #d4af37; // Bordure dorée
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease;
+
+  &:hover {
+    transform: scale(1.05);
+    
+    .avatar-overlay {
+      opacity: 1;
+    }
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: filter 0.3s ease;
+
+    &.preview-mode {
+      filter: brightness(0.8);
+    }
+  }
+
+  .avatar-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    color: white;
+
+    .camera-icon {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .overlay-text {
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+  }
+}
+
+// Boutons d'action avatar
+.avatar-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+
+  button {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+
+  .btn-avatar-save {
+    background: #28a745;
+    color: white;
+    
+    &:hover:not(:disabled) {
+      background: #218838;
+      transform: scale(1.1);
+    }
+  }
+
+  .btn-avatar-cancel {
+    background: #dc3545;
+    color: white;
+    
+    &:hover:not(:disabled) {
+      background: #c82333;
+      transform: scale(1.1);
+    }
+  }
+}
+
+// Animation de chargement pour l'upload
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.uploading {
+  animation: pulse 1.5s infinite;
+}
