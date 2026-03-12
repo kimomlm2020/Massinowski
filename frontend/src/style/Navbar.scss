@@ -53,7 +53,6 @@ $navbar-height-scrolled: 70px;
   z-index: 1000;
   height: $navbar-height;
   transition: $transition-smooth;
-  // FIX 1: Ajout d'un background solide pour éviter la transparence
   background: $color-bg-dark;
 
   &.scrolled {
@@ -266,31 +265,36 @@ $navbar-height-scrolled: 70px;
 }
 
 // ============================================
-// GROUPE PROFILE & DROPDOWN (REACT CONTROLLED)
+// GROUPE PROFILE & DROPDOWN (CORRIGÉ POUR REACT)
 // ============================================
 .profile-group {
   position: relative;
 }
 
+// CORRECTION: Le dropdown est visible par défaut car React le rend conditionnellement
 .dropdown-menu {
   position: absolute;
   top: calc(100% + 12px);
   right: 0;
   min-width: 200px;
-  opacity: 0;
-  visibility: hidden;
-  transform: translateY(-10px);
-  transition: $transition-smooth;
   z-index: 1002;
-
-  // Show when React adds 'show' class or inline style
-  &.show,
-  &[style*="opacity: 1"] {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
+  animation: dropdownSlide 0.2s ease-out;
+  
+  // CORRECTION: Suppression de opacity/visibility hidden car React gère le rendu
+  // Le dropdown n'existe dans le DOM que quand dropdownOpen est true
+  
+  @keyframes dropdownSlide {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 
+  // Zone de sécurité pour le hover
   &::before {
     content: '';
     position: absolute;
@@ -310,23 +314,41 @@ $navbar-height-scrolled: 70px;
   backdrop-filter: blur(20px);
 
   .dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
     padding: 12px 16px;
     margin: 0;
     font-size: 14px;
+    font-weight: 500;
     color: $color-text;
     cursor: pointer;
     border-radius: 8px;
     transition: $transition-fast;
-    display: block;
+    border: none;
+    background: transparent;
+    font-family: inherit;
+    text-align: left;
+
+    .dropdown-icon {
+      font-size: 16px;
+      color: $color-gold;
+      transition: $transition-fast;
+    }
 
     &:hover {
       background: rgba($color-gold, 0.1);
       color: $color-gold;
       padding-left: 20px;
+      
+      .dropdown-icon {
+        transform: scale(1.1);
+      }
     }
 
     &:not(:last-child) {
-      border-bottom: 1px solid rgba($color-gold, 0.05);
+      margin-bottom: 4px;
     }
 
     &.logout-item {
@@ -334,6 +356,10 @@ $navbar-height-scrolled: 70px;
       border-top: 1px solid rgba($color-gold, 0.1);
       margin-top: 4px;
       padding-top: 12px;
+
+      .dropdown-icon {
+        color: $color-danger;
+      }
 
       &:hover {
         background: rgba($color-danger, 0.1);
@@ -344,7 +370,7 @@ $navbar-height-scrolled: 70px;
 }
 
 // ============================================
-// BOUTON MENU MOBILE - CODE ORIGINAL INTACT
+// BOUTON MENU MOBILE
 // ============================================
 .menu-toggle-btn {
   display: none;
@@ -383,7 +409,7 @@ $navbar-height-scrolled: 70px;
 }
 
 // ============================================
-// SIDEBAR MOBILE - CODE ORIGINAL INTACT
+// SIDEBAR MOBILE
 // ============================================
 .mobile-sidebar {
   position: fixed;
@@ -421,7 +447,6 @@ $navbar-height-scrolled: 70px;
   position: relative;
 }
 
-// Header sidebar
 .sidebar-logo-container {
   @include flex-center;
   margin-bottom: 40px;
@@ -455,9 +480,6 @@ $navbar-height-scrolled: 70px;
   }
 }
 
-// ============================================
-// NAVIGATION SIDEBAR (CORRECTED FOR BUTTON ELEMENTS)
-// ============================================
 .sidebar-nav {
   flex: 1;
 }
@@ -471,7 +493,6 @@ $navbar-height-scrolled: 70px;
   gap: 8px;
 }
 
-// Button-styled navigation items
 .sidebar-link {
   display: block;
   width: 100%;
@@ -485,9 +506,9 @@ $navbar-height-scrolled: 70px;
   border-radius: 12px;
   transition: $transition-smooth;
   border: 1px solid transparent;
-  background: none; // Reset button default
-  text-align: left; // Reset button default
-  font-family: inherit; // Reset button default
+  background: none;
+  text-align: left;
+  font-family: inherit;
   
   &:hover {
     background: rgba($color-gold, 0.1);
@@ -507,7 +528,6 @@ $navbar-height-scrolled: 70px;
   }
 }
 
-// Footer sidebar avec auth
 .sidebar-footer {
   margin-top: auto;
   padding-top: 24px;
@@ -530,8 +550,8 @@ $navbar-height-scrolled: 70px;
   cursor: pointer;
   transition: $transition-bounce;
   border: 2px solid;
-  background: none; // Reset default
-  font-family: inherit; // Reset default
+  background: none;
+  font-family: inherit;
 
   &.login {
     background: transparent;
@@ -558,9 +578,6 @@ $navbar-height-scrolled: 70px;
   }
 }
 
-// ============================================
-// OVERLAY MOBILE
-// ============================================
 .mobile-sidebar.open::before {
   content: '';
   position: fixed;
@@ -579,19 +596,13 @@ $navbar-height-scrolled: 70px;
   to { opacity: 1; }
 }
 
-// ============================================
-// CLASSE POUR BLOQUER LE SCROLL
-// ============================================
 body.sidebar-open {
   overflow: hidden;
-  position: fixed; // iOS fix
+  position: fixed;
   width: 100%;
   height: 100%;
 }
 
-// ============================================
-// RESPONSIVE ADDITIONNEL
-// ============================================
 @media (max-width: 1200px) {
   .navbar-menu .nav-link {
     padding: 8px 12px;
@@ -643,9 +654,6 @@ body.sidebar-open {
   }
 }
 
-// ============================================
-// ANIMATIONS ENTRÉE
-// ============================================
 @keyframes slideInDown {
   from {
     transform: translateY(-100%);
@@ -661,9 +669,6 @@ body.sidebar-open {
   animation: slideInDown 0.6s ease;
 }
 
-// ============================================
-// DARK NAVBAR - LEGAL PAGES
-// ============================================
 .navbar-dark-page {
   background: $color-bg-dark !important;
   border-bottom: 1px solid rgba($color-gold, 0.1);
