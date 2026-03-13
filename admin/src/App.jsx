@@ -5,14 +5,13 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import Add from "./pages/Add";
 import List from "./pages/List";
 import Orders from "./pages/Orders";
-import OrderDetail from "./pages/OrderDetail"; // ⭐ AJOUTÉ
+import OrderDetail from "./pages/OrderDetail";
 import Login from "./components/Login";
 import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import './style/App.scss';
 
 export const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:4000";
-export const currency = '$';
+export const currency = '£';
 
 const App = () => {
   const [token, setToken] = useState(localStorage.getItem('token') ? localStorage.getItem('token') : '');
