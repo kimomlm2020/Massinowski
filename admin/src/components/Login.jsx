@@ -21,7 +21,7 @@ const Login = ({ setToken }) => {
 
     try {
       const response = await axios.post(
-        `${backendUrl}/api/user/admin`,  // ✅ Template literal pour clarté
+        `${backendUrl}/api/user/admin`,  
         { email, password }
       );
 
