@@ -2,7 +2,6 @@ import React, { useContext, useState, useEffect } from 'react'
 import { ShopContext } from '../context/ShopContext';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { Eye, EyeOff } from 'lucide-react'; // ⭐ Import des icônes
 import '../style/Login.scss';
 
 const Login = () => {
@@ -46,19 +45,17 @@ const Login = () => {
           setToken(response.data.token);
           localStorage.setItem('token', response.data.token);
 
-          // ✅ Stocker l'utilisateur aussi
           if (response.data.user) {
             setUser(response.data.user);
             localStorage.setItem('user', JSON.stringify(response.data.user));
           }
 
           toast.success('Registration successful!');
-          navigate('/'); // ✅ REDIRECTION
+          navigate('/');
         } else {
           toast.error(response.data.message);
         }
       } else {
-        // LOGIN
         const response = await axios.post(backendUrl + '/api/user/login', { 
           email, 
           password 
@@ -70,14 +67,13 @@ const Login = () => {
           setToken(response.data.token);
           localStorage.setItem('token', response.data.token);
 
-          // ✅ Stocker l'utilisateur aussi
           if (response.data.user) {
             setUser(response.data.user);
             localStorage.setItem('user', JSON.stringify(response.data.user));
           }
 
           toast.success('Login successful!');
-          navigate('/'); // ✅ REDIRECTION IMMÉDIATE
+          navigate('/');
 
         } else {
           toast.error(response.data.message);
@@ -120,7 +116,6 @@ const Login = () => {
     }
   };
 
-  // ✅ Redirection de secours si le token change (au cas où)
   useEffect(() => {
     if (token) {
       console.log('Token detected, redirecting...');
@@ -213,13 +208,13 @@ const Login = () => {
           />
         </div>
 
-        {/* ⭐ Champ mot de passe avec icône */}
+        {/* ⭐ Champ mot de passe avec emoji */}
         <div className="form-group password-group">
           <div className="password-input-wrapper">
             <input
               onChange={(e) => setPassword(e.target.value)}
               value={password}
-              type={showPassword ? "text" : "password"}  // ⭐ Change le type selon l'état
+              type={showPassword ? "text" : "password"}
               placeholder="Password"
               required
               className="form-input password-input"
@@ -232,11 +227,9 @@ const Login = () => {
               disabled={isLoading}
               aria-label={showPassword ? "Hide password" : "Show password"}
             >
-              {showPassword ? (
-                <EyeOff size={20} color="#f7ef8a" />
-              ) : (
-                <Eye size={20} color="#f7ef8a" />
-              )}
+              <span className="password-emoji" role="img" aria-label="toggle password">
+                {showPassword ? '🙈' : '👁️'}
+              </span>
             </button>
           </div>
         </div>
@@ -258,7 +251,7 @@ const Login = () => {
               setName('');
               setEmail('');
               setPassword('');
-              setShowPassword(false);  // ⭐ Réinitialise l'affichage du mot de passe
+              setShowPassword(false);
             }}
           >
             {currentState === "Login" ? "Create account" : "Login Here"}
