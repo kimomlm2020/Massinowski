@@ -30,7 +30,6 @@ const ShopContextProvider = (props) => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
     localStorage.removeItem('cart');
-    toast.success('Logged out successfully');
     navigate('/');
   }, [navigate]);
 
@@ -54,7 +53,7 @@ const ShopContextProvider = (props) => {
       (response) => response,
       (error) => {
         if (error.response?.status === 401) {
-          logout(); // ✅ logout est maintenant défini
+          logout(); 
         }
         return Promise.reject(error);
       }
@@ -185,7 +184,7 @@ const ShopContextProvider = (props) => {
             support: prog.support || 'Standard support',
             type: 'program',
             icon: getIconForCategory(prog.category),
-            duration: '/month',
+            duration: prog.duration || 'Ongoing', // ← CORRIGÉ : utilise la durée du backend
             features: prog.features || []
           })));
         }
@@ -215,37 +214,37 @@ const ShopContextProvider = (props) => {
       id: 'standard',
       _id: 'standard',
       name: 'Standard',
-      price: 59,
+      price: 180,
       level: 'Base',
       category: 'Coaching',
       type: 'program',
       icon: '📊',
-      duration: '/month',
+      duration: '4 weeks', // ← CORRIGÉ : durée réaliste au lieu de '/month'
       features: ["Personalized training plan", "Personalized nutrition plan"]
     },
     {
       id: 'advanced',
       _id: 'advanced',
       name: 'Advanced',
-      price: 99,
+      price: 450,
       level: 'Intermediate',
       category: 'Coaching',
       popular: true,
       type: 'program',
       icon: '🚀',
-      duration: '/month',
+      duration: '8 weeks', // ← CORRIGÉ : durée réaliste
       features: ["Weekly updates", "WhatsApp support"]
     },
     {
       id: 'vip',
       _id: 'vip',
       name: 'VIP',
-      price: 149,
+      price: 650,
       level: 'Elite',
       category: 'Coaching',
       type: 'program',
       icon: '👑',
-      duration: '/month',
+      duration: '12 weeks', // ← CORRIGÉ : durée réaliste
       features: ["Daily support", "Full accountability"]
     }
   ];
@@ -279,7 +278,7 @@ const ShopContextProvider = (props) => {
       type: 'program',
       icon: item.icon || '📋',
       level: item.level || 'Beginner',
-      duration: item.duration || '/month',
+      duration: item.duration || 'Ongoing', // ← CORRIGÉ : garde la durée réelle
       quantity: 1
     };
 
