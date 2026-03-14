@@ -1,4 +1,4 @@
-// Login.scss - Dark & Gold Theme (Version simple)
+// Login.scss - Dark & Gold Theme (Version avec emojis)
 
 // Variables
 $gold: #f7ef8a;
@@ -74,6 +74,18 @@ $success: #4caf50;
   margin-bottom: 1.5rem;
 }
 
+// ⭐ Groupe mot de passe avec position relative
+.password-group {
+  position: relative;
+}
+
+// ⭐ Wrapper pour l'input et le bouton emoji
+.password-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
 // Inputs
 .form-input {
   width: 100%;
@@ -102,6 +114,55 @@ $success: #4caf50;
   &:disabled {
     opacity: 0.5;
     cursor: not-allowed;
+  }
+}
+
+// ⭐ Input mot de passe avec padding à droite pour l'emoji
+.password-input {
+  padding-right: 50px; // Espace pour l'emoji
+}
+
+// ⭐ Bouton pour afficher/masquer le mot de passe (avec emoji)
+.password-toggle-btn {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  @include transition;
+
+  &:hover:not(:disabled) {
+    background: rgba($gold, 0.15);
+    transform: translateY(-50%) scale(1.1);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(-50%) scale(0.95);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+// ⭐ Style pour l'emoji
+.password-emoji {
+  font-size: 1.4rem;
+  line-height: 1;
+  display: block;
+  filter: brightness(1.1);
+  @include transition;
+
+  &:hover {
+    filter: brightness(1.3) drop-shadow(0 0 5px rgba($gold, 0.5));
   }
 }
 
@@ -273,5 +334,18 @@ $success: #4caf50;
 
   .form-title {
     font-size: 1.5rem;
+  }
+
+  // Ajustement pour mobile
+  .password-toggle-btn {
+    right: 8px;
+  }
+
+  .password-emoji {
+    font-size: 1.2rem;
+  }
+
+  .password-input {
+    padding-right: 45px;
   }
 }
