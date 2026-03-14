@@ -2,6 +2,7 @@ import React, { useContext, useState, useEffect } from 'react'
 import { ShopContext } from '../context/ShopContext';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { Eye, EyeOff } from 'lucide-react'; // ⭐ Import des icônes
 import '../style/Login.scss';
 
 const Login = () => {
@@ -10,14 +11,17 @@ const Login = () => {
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
-  
+
   const [showForgotPassword, setShowForgotPassword] = useState(false);
   const [resetEmail, setResetEmail] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
+  // ⭐ Nouvel état pour afficher/masquer le mot de passe
+  const [showPassword, setShowPassword] = useState(false);
+
   const onSubmitHandler = async (event) => {
     event.preventDefault();
-    
+
     if (!email || !password) {
       toast.error('Please fill in all fields');
       return;
@@ -25,29 +29,29 @@ const Login = () => {
 
     try {
       setIsLoading(true);
-      
+
       if (currentState === 'Sign Up') {
         if (!name) {
           toast.error('Please enter your name');
           return;
         }
-        
+
         const response = await axios.post(backendUrl + '/api/user/register', { 
           name, 
           email, 
           password 
         });
-        
+
         if (response.data.success) {
           setToken(response.data.token);
           localStorage.setItem('token', response.data.token);
-          
+
           // ✅ Stocker l'utilisateur aussi
           if (response.data.user) {
             setUser(response.data.user);
             localStorage.setItem('user', JSON.stringify(response.data.user));
           }
-          
+
           toast.success('Registration successful!');
           navigate('/'); // ✅ REDIRECTION
         } else {
@@ -59,22 +63,22 @@ const Login = () => {
           email, 
           password 
         });
-        
+
         if (response.data.success) {
           console.log('✅ Login success, navigating to /Profile');
-          
+
           setToken(response.data.token);
           localStorage.setItem('token', response.data.token);
-          
+
           // ✅ Stocker l'utilisateur aussi
           if (response.data.user) {
             setUser(response.data.user);
             localStorage.setItem('user', JSON.stringify(response.data.user));
           }
-          
+
           toast.success('Login successful!');
           navigate('/'); // ✅ REDIRECTION IMMÉDIATE
-          
+
         } else {
           toast.error(response.data.message);
         }
@@ -89,7 +93,7 @@ const Login = () => {
 
   const handleForgotPassword = async (e) => {
     e.preventDefault();
-    
+
     if (!resetEmail) {
       toast.error('Please enter your email address');
       return;
@@ -100,7 +104,7 @@ const Login = () => {
       const response = await axios.post(backendUrl + '/api/user/forgot-password', { 
         email: resetEmail 
       });
-      
+
       if (response.data.success) {
         toast.success('Password reset link sent to your email!');
         setShowForgotPassword(false);
@@ -123,6 +127,11 @@ const Login = () => {
       navigate('/');
     }
   }, [token, navigate]);
+
+  // ⭐ Fonction pour basculer l'affichage du mot de passe
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
 
   if (showForgotPassword) {
     return (
@@ -155,7 +164,7 @@ const Login = () => {
             >
               {isLoading ? 'Sending...' : 'Send Reset Link'}
             </button>
-            
+
             <span 
               className="back-to-login"
               onClick={() => {
@@ -204,16 +213,32 @@ const Login = () => {
           />
         </div>
 
-        <div className="form-group">
-          <input
-            onChange={(e) => setPassword(e.target.value)}
-            value={password}
-            type="password"
-            placeholder="Password"
-            required
-            className="form-input"
-            disabled={isLoading}
-          />
+        {/* ⭐ Champ mot de passe avec icône */}
+        <div className="form-group password-group">
+          <div className="password-input-wrapper">
+            <input
+              onChange={(e) => setPassword(e.target.value)}
+              value={password}
+              type={showPassword ? "text" : "password"}  // ⭐ Change le type selon l'état
+              placeholder="Password"
+              required
+              className="form-input password-input"
+              disabled={isLoading}
+            />
+            <button
+              type="button"
+              className="password-toggle-btn"
+              onClick={togglePasswordVisibility}
+              disabled={isLoading}
+              aria-label={showPassword ? "Hide password" : "Show password"}
+            >
+              {showPassword ? (
+                <EyeOff size={20} color="#f7ef8a" />
+              ) : (
+                <Eye size={20} color="#f7ef8a" />
+              )}
+            </button>
+          </div>
         </div>
 
         <div className="form-actions">
@@ -225,7 +250,7 @@ const Login = () => {
               Forgot your password?
             </span>
           )}
-          
+
           <span 
             className="toggle-state" 
             onClick={() => {
@@ -233,6 +258,7 @@ const Login = () => {
               setName('');
               setEmail('');
               setPassword('');
+              setShowPassword(false);  // ⭐ Réinitialise l'affichage du mot de passe
             }}
           >
             {currentState === "Login" ? "Create account" : "Login Here"}
