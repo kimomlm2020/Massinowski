@@ -1,6 +1,9 @@
+// PrivacyPolicy.jsx
 import React from 'react';
 import { motion } from 'framer-motion';
-import '../style/LegalPages.scss'
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
+import '../style/LegalPages.scss';
 
 function PrivacyPolicy() {
   const privacySections = [
@@ -30,73 +33,105 @@ function PrivacyPolicy() {
     }
   ];
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.1 }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      transition: { duration: 0.6 }
+    }
+  };
+
   return (
-    <div className="app">
-      {/* Reuse Navbar from App.jsx */}
-      <section className="privacy-hero">
-        <div className="container">
-          <motion.div
-            className="hero-content"
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-          >
-            <h1>Privacy Policy</h1>
-            <p className="last-updated">
-              Last updated: December 15, 2024
-            </p>
-          </motion.div>
-        </div>
-      </section>
-
-      <section className="privacy-content">
-        <div className="container">
-          <motion.div
-            className="intro-text"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-          >
-            <p>
-              At Massinowski Coaching, your privacy is our priority. This policy explains how we collect, use, and protect your information.
-            </p>
-          </motion.div>
-
-          <div className="privacy-sections">
-            {privacySections.map((section, index) => (
-              <motion.div
-                key={index}
-                className="privacy-section"
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                viewport={{ once: true }}
-              >
-                <h3>{section.title}</h3>
-                <p>{section.content}</p>
-              </motion.div>
-            ))}
+    <div className="legal-page">
+      <Navbar />
+      
+      <main className="legal-main">
+        {/* Hero Section */}
+        <section className="legal-hero">
+          <div className="container">
+            <motion.div
+              className="hero-content"
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
+            >
+              <h1>Privacy Policy</h1>
+              <p className="last-updated">Last updated: December 15, 2024</p>
+            </motion.div>
           </div>
+        </section>
 
-          <motion.div
-            className="contact-section"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.6 }}
-            viewport={{ once: true }}
-          >
-            <h3>Questions and Contact</h3>
-            <p>
-              For any questions regarding this privacy policy, contact us:
-            </p>
-            <div className="contact-methods">
-              <p>📧 contact@massinowski.com</p>
-              <p>📱 +48 530 428 877</p>
-            </div>
-          </motion.div>
-        </div>
-      </section>
+        {/* Content Section */}
+        <section className="legal-content">
+          <div className="container">
+            <motion.div
+              className="intro-text"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              viewport={{ once: true, margin: "-100px" }}
+            >
+              <p>
+                At Massinowski Coaching, your privacy is our priority. This policy explains how we collect, use, and protect your information.
+              </p>
+            </motion.div>
+
+            <motion.div 
+              className="legal-sections numbered-sections"
+              variants={containerVariants}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-50px" }}
+            >
+              {privacySections.map((section, index) => (
+                <motion.div
+                  key={index}
+                  className="legal-section"
+                  variants={itemVariants}
+                >
+                  <div className="section-number">{String(index + 1).padStart(2, '0')}</div>
+                  <div className="section-content">
+                    <h3>{section.title}</h3>
+                    <p>{section.content}</p>
+                  </div>
+                </motion.div>
+              ))}
+            </motion.div>
+
+            <motion.div
+              className="contact-section"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              viewport={{ once: true }}
+            >
+              <h3>Questions and Contact</h3>
+              <p>For any questions regarding this privacy policy, contact us:</p>
+              <div className="contact-methods">
+                <a href="mailto:contact@massinowski.com" className="contact-link">
+                  <span className="icon">📧</span>
+                  contact@massinowski.com
+                </a>
+                <a href="tel:+48530428877" className="contact-link">
+                  <span className="icon">📱</span>
+                  +48 530 428 877
+                </a>
+              </div>
+            </motion.div>
+          </div>
+        </section>
+      </main>
+
+      <Footer />
     </div>
   );
 }

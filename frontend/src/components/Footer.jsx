@@ -217,7 +217,7 @@ function Footer() {
         <div className="container">
           <div className="bottom-content">
             <p className="copyright">
-              © {new Date().getFullYear()} <span>Massinowski Coaching</span>. All rights reserved.
+              © {new Date().getFullYear()} <span>Massinowski</span>. All rights reserved.
             </p>
             <div className="legal-links">
               {/* ✅ FIXED: Changed from /PrivacyPolicy to /privacy-policy */}

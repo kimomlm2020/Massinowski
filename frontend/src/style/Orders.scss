@@ -101,7 +101,7 @@ $large: 1200px;
 }
 
 // ============================================
-// STYLES DE BASE
+// STYLES DE BASE - UNIQUEMENT SCOPÉS À .orders-page
 // ============================================
 
 .orders-page {
@@ -109,15 +109,47 @@ $large: 1200px;
   background: linear-gradient(180deg, $dark-900 0%, $dark-800 50%, $dark-900 100%);
   color: $text-primary;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  
+  // CORRECTION: Padding-top pour la navbar fixe (80px + marge)
+  padding-top: 100px;
+
+  @include responsive($tablet) {
+    padding-top: 90px;
+  }
+
+  // Scrollbar UNIQUEMENT à l'intérieur de .orders-page
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: $dark-800;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: $gold-700;
+    border-radius: 4px;
+
+    &:hover {
+      background: $gold-500;
+    }
+  }
+
+  // Sélection UNIQUEMENT à l'intérieur de .orders-page
+  ::selection {
+    background: rgba($gold-500, 0.3);
+    color: $text-primary;
+  }
 
   .orders-container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 110px 24px;
+    padding: 10px 24px;
     min-height: calc(100vh - 200px);
 
     @include responsive($tablet) {
-      padding: 24px 16px;
+      padding: 0px 16px;
     }
   }
 }
@@ -126,10 +158,11 @@ $large: 1200px;
 // TITRE DE PAGE
 // ============================================
 
-.page-title {
+.orders-page .page-title {
   font-size: 2.5rem;
   font-weight: 700;
   margin-bottom: 40px;
+  margin-top: 20px;
   text-align: center;
   @include gold-gradient-text;
   position: relative;
@@ -150,10 +183,13 @@ $large: 1200px;
   @include responsive($tablet) {
     font-size: 1.875rem;
     margin-bottom: 24px;
+    margin-top: 30px;
   }
 
   @include responsive($mobile) {
     font-size: 1.5rem;
+    margin-top: 40px;
+    margin-bottom: 20px;
   }
 }
 
@@ -161,7 +197,7 @@ $large: 1200px;
 // ÉTAT DE CHARGEMENT
 // ============================================
 
-.loading-state {
+.orders-page .loading-state {
   @include flex-center;
   flex-direction: column;
   min-height: 400px;
@@ -190,7 +226,7 @@ $large: 1200px;
 // LISTE DES COMMANDES
 // ============================================
 
-.orders-list {
+.orders-page .orders-list {
   display: flex;
   flex-direction: column;
   gap: 24px;
@@ -201,7 +237,7 @@ $large: 1200px;
 // CARTE DE COMMANDE
 // ============================================
 
-.order-card {
+.orders-page .order-card {
   @include card-style;
   padding: 28px;
   transition: all 0.3s ease;
@@ -242,7 +278,7 @@ $large: 1200px;
 // EN-TÊTE DE COMMANDE
 // ============================================
 
-.order-header {
+.orders-page .order-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -257,13 +293,13 @@ $large: 1200px;
   }
 }
 
-.order-meta {
+.orders-page .order-meta {
   display: flex;
   flex-direction: column;
   gap: 6px;
 }
 
-.order-id {
+.orders-page .order-id {
   font-size: 1.125rem;
   font-weight: 600;
   color: $gold-400;
@@ -271,12 +307,12 @@ $large: 1200px;
   letter-spacing: 0.5px;
 }
 
-.order-date {
+.orders-page .order-date {
   font-size: 0.875rem;
   color: $text-muted;
 }
 
-.order-status {
+.orders-page .order-status {
   padding: 8px 20px;
   border-radius: 20px;
   font-size: 0.75rem;
@@ -285,7 +321,6 @@ $large: 1200px;
   letter-spacing: 1px;
   color: $dark-900;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-  background-color: #2a2a2a !important;
 
   @include responsive($mobile) {
     align-self: flex-start;
@@ -296,14 +331,14 @@ $large: 1200px;
 // LISTE DES PROGRAMMES
 // ============================================
 
-.programs-list {
+.orders-page .programs-list {
   display: flex;
   flex-direction: column;
   gap: 16px;
   margin-bottom: 24px;
 }
 
-.program-item {
+.orders-page .program-item {
   display: flex;
   gap: 20px;
   padding: 16px;
@@ -324,7 +359,7 @@ $large: 1200px;
   }
 }
 
-.program-image-wrapper {
+.orders-page .program-image-wrapper {
   position: relative;
   width: 100px;
   height: 100px;
@@ -363,7 +398,7 @@ $large: 1200px;
   }
 }
 
-.program-info {
+.orders-page .program-info {
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -429,7 +464,7 @@ $large: 1200px;
 // PIED DE COMMANDE
 // ============================================
 
-.order-footer {
+.orders-page .order-footer {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -446,7 +481,7 @@ $large: 1200px;
   }
 }
 
-.payment-badge {
+.orders-page .payment-badge {
   padding: 6px 16px;
   border-radius: 16px;
   font-size: 0.875rem;
@@ -466,7 +501,7 @@ $large: 1200px;
   }
 }
 
-.total {
+.orders-page .total {
   font-size: 1.5rem;
   font-weight: 700;
   color: $gold-300;
@@ -488,7 +523,7 @@ $large: 1200px;
 // ADRESSE
 // ============================================
 
-.order-address {
+.orders-page .order-address {
   padding: 16px;
   background: $dark-800;
   border-radius: 8px;
@@ -513,7 +548,7 @@ $large: 1200px;
 // ÉTAT VIDE
 // ============================================
 
-.empty-state {
+.orders-page .empty-state {
   @include flex-center;
   flex-direction: column;
   min-height: 400px;
@@ -550,35 +585,4 @@ $large: 1200px;
       transform: translateY(0);
     }
   }
-}
-
-// ============================================
-// SCROLLBAR PERSONNALISÉE
-// ============================================
-
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: $dark-800;
-}
-
-::-webkit-scrollbar-thumb {
-  background: $gold-700;
-  border-radius: 4px;
-
-  &:hover {
-    background: $gold-500;
-  }
-}
-
-// ============================================
-// SÉLECTION DE TEXTE
-// ============================================
-
-::selection {
-  background: rgba($gold-500, 0.3);
-  color: $text-primary;
 }

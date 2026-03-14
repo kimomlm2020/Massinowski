@@ -1,4 +1,4 @@
-import React, { useState, useContext, useCallback, useMemo } from 'react';
+import React, { useState, useContext, useCallback, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { ShopContext } from '../context/ShopContext';
@@ -24,13 +24,17 @@ import {
   FaCrown,
   FaBolt,
   FaFire,
-  FaGem
+  FaGem,
+  FaExclamationTriangle,
+  FaSync
 } from 'react-icons/fa';
 import "../style/Programs.scss";
 
-// ========== MAPPING ICÔNES PAR TYPE DE PROGRAMME ==========
+// ========== CONSTANTES & CONFIGURATION ==========
+const STORAGE_KEY = 'massinowski_programs_cache';
+const CACHE_DURATION = 24 * 60 * 60 * 1000; // 24 heures
 
-// Configuration des icônes par niveau (pour les badges et tags)
+// ========== MAPPING ICÔNES PAR TYPE DE PROGRAMME ==========
 const LEVEL_ICONS = {
   Beginner: { icon: FaStar, color: '#10b981', label: 'Beginner' },
   Intermediate: { icon: FaBolt, color: '#f59e0b', label: 'Intermediate' },
@@ -38,64 +42,44 @@ const LEVEL_ICONS = {
   Elite: { icon: FaCrown, color: '#8b5cf6', label: 'Elite' }
 };
 
-// Mapping intelligent des icônes par mot-clé dans le titre
 const getProgramIcon = (plan) => {
   const title = (plan.title || plan.name || '').toLowerCase();
   const subtitle = (plan.subtitle || '').toLowerCase();
   const category = (plan.category || '').toLowerCase();
   const fullText = `${title} ${subtitle} ${category}`;
   
-  // Musculation & Force
   if (fullText.match(/(muscle|strength|force|musculation|hypertrophy|powerlifting|bodybuilding|gain|mass|weight lifting)/)) {
     return { icon: FaDumbbell, color: '#f59e0b', bg: 'rgba(245, 158, 11, 0.15)' };
   }
-  
-  // Nutrition & Alimentation
   if (fullText.match(/(nutrition|diet|meal|food|alimentation|repas|macro|calorie|healthy eating|clean eating)/)) {
     return { icon: FaAppleAlt, color: '#22c55e', bg: 'rgba(34, 197, 94, 0.15)' };
   }
-  
-  // Coaching Personnel & 1-on-1
   if (fullText.match(/(coaching|personal|1-on-1|private|consultation|mentor|accompagnement|suivi perso)/)) {
     return { icon: FaUserTie, color: '#3b82f6', bg: 'rgba(59, 130, 246, 0.15)' };
   }
-  
-  // Transformation & Challenge
   if (fullText.match(/(transformation|challenge|90 day|12 week|reset|metamorphosis|change|revolution)/)) {
     return { icon: FaRocket, color: '#ec4899', bg: 'rgba(236, 72, 153, 0.15)' };
   }
-  
-  // Performance & Athlétisme
   if (fullText.match(/(performance|athletic|sport|competition|endurance|speed|agility|athlete|pro)/)) {
     return { icon: FaChartLine, color: '#ef4444', bg: 'rgba(239, 68, 68, 0.15)' };
   }
-  
-  // Bien-être & Santé
   if (fullText.match(/(wellness|health|mind|yoga|recovery|mobility|well-being|santé|mental|balance)/)) {
     return { icon: FaHeart, color: '#14b8a6', bg: 'rgba(20, 184, 166, 0.15)' };
   }
-  
-  // Cardio & Conditionnement
   if (fullText.match(/(cardio|conditioning|hiit|fat burn|weight loss|maigrir|perte|running|cycling)/)) {
     return { icon: FaRunning, color: '#f97316', bg: 'rgba(249, 115, 22, 0.15)' };
   }
-  
-  // Premium & VIP
   if (fullText.match(/(vip|premium|elite|exclusive|gold|platinum|luxury|concierge)/)) {
     return { icon: FaGem, color: '#8b5cf6', bg: 'rgba(139, 92, 246, 0.15)' };
   }
-  
-  // Compétition & Préparation
   if (fullText.match(/(competition|prep|stage|contest|show|photo shoot|beach body)/)) {
     return { icon: FaMedal, color: '#eab308', bg: 'rgba(234, 179, 8, 0.15)' };
   }
   
-  // Par défaut - icône générique sans croix
   return { icon: FaStar, color: '#fbbf24', bg: 'rgba(251, 191, 36, 0.15)' };
 };
 
 // ========== DEFAULT FEATURES PAR NIVEAU ==========
-
 const DEFAULT_FEATURES = {
   Beginner: [
     "Personalized training plan (split, volume, intensity)",
@@ -187,7 +171,68 @@ const getProgramFeatures = (plan) => {
   return DEFAULT_FEATURES[level] || DEFAULT_FEATURES.Beginner;
 };
 
-// Composant pour l'icône de programme avec animation
+// ========== SERVICES DE CACHE ==========
+const cacheService = {
+  // Sauvegarder les programmes dans localStorage
+  save: (programs) => {
+    try {
+      const data = {
+        programs,
+        timestamp: Date.now(),
+        version: '1.0'
+      };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      console.log('💾 Programmes sauvegardés dans le cache:', programs.length);
+    } catch (error) {
+      console.error('Erreur lors de la sauvegarde du cache:', error);
+    }
+  },
+
+  // Récupérer les programmes du cache
+  get: () => {
+    try {
+      const data = localStorage.getItem(STORAGE_KEY);
+      if (!data) return null;
+      
+      const parsed = JSON.parse(data);
+      const age = Date.now() - (parsed.timestamp || 0);
+      
+      // Vérifier si le cache est encore valide
+      if (age > CACHE_DURATION) {
+        console.log('⏰ Cache expiré');
+        localStorage.removeItem(STORAGE_KEY);
+        return null;
+      }
+      
+      console.log('📦 Programmes récupérés du cache:', parsed.programs?.length);
+      return parsed.programs;
+    } catch (error) {
+      console.error('Erreur lors de la lecture du cache:', error);
+      return null;
+    }
+  },
+
+  // Vérifier si le cache est valide
+  isValid: () => {
+    try {
+      const data = localStorage.getItem(STORAGE_KEY);
+      if (!data) return false;
+      
+      const parsed = JSON.parse(data);
+      const age = Date.now() - (parsed.timestamp || 0);
+      return age <= CACHE_DURATION;
+    } catch {
+      return false;
+    }
+  },
+
+  // Effacer le cache
+  clear: () => {
+    localStorage.removeItem(STORAGE_KEY);
+  }
+};
+
+// ========== COMPOSANTS ==========
 const ProgramIcon = ({ plan, size = 48 }) => {
   const { icon: IconComponent, color, bg } = getProgramIcon(plan);
   
@@ -216,7 +261,6 @@ const ProgramIcon = ({ plan, size = 48 }) => {
   );
 };
 
-// Composant pour le badge de niveau
 const LevelBadge = ({ level }) => {
   const config = LEVEL_ICONS[level] || LEVEL_ICONS.Beginner;
   const IconComponent = config.icon;
@@ -236,7 +280,6 @@ const LevelBadge = ({ level }) => {
   );
 };
 
-// Composant pour le tag dans le hero
 const LevelTag = ({ level }) => {
   const config = LEVEL_ICONS[level] || LEVEL_ICONS.Beginner;
   const IconComponent = config.icon;
@@ -257,7 +300,24 @@ const LevelTag = ({ level }) => {
   );
 };
 
-// PlanCard component
+// ========== COMPOSANT OFFLINE BANNER ==========
+const OfflineBanner = ({ onRetry, isRetrying }) => (
+  <motion.div 
+    className="offline-banner"
+    initial={{ opacity: 0, y: -20 }}
+    animate={{ opacity: 1, y: 0 }}
+    exit={{ opacity: 0, y: -20 }}
+  >
+    <FaExclamationTriangle />
+    <span>Mode hors ligne - Affichage des programmes en cache</span>
+    <button onClick={onRetry} disabled={isRetrying} className="retry-btn">
+      {isRetrying ? <FaSpinner className="spin" /> : <FaSync />}
+      {isRetrying ? ' Reconnexion...' : ' Réessayer'}
+    </button>
+  </motion.div>
+);
+
+// ========== COMPOSANT PLAN CARD ==========
 const PlanCard = React.memo(({ 
   plan, 
   index, 
@@ -272,6 +332,14 @@ const PlanCard = React.memo(({
   const level = getProgramLevel(plan);
   const features = useMemo(() => getProgramFeatures(plan), [plan]);
   const hasMoreFeatures = features.length > 3;
+
+  // Formater la durée pour l'affichage
+  const formatDuration = (duration) => {
+    if (!duration) return '';
+    // Supprime le slash initial si présent
+    const cleanDuration = duration.replace(/^\//, '');
+    return cleanDuration;
+  };
 
   return (
     <motion.div
@@ -305,7 +373,7 @@ const PlanCard = React.memo(({
 
       <div className="plan-price">
         <span className="price">{plan.priceDisplay || `${plan.price || 0}€`}</span>
-        <span className="duration">{plan.duration || 'month'}</span>
+        <span className="duration">/{formatDuration(plan.duration)}</span> {/* ← CORRIGÉ : utilise la durée réelle */}
       </div>
 
       <div className="plan-description">
@@ -425,18 +493,101 @@ const PlanCard = React.memo(({
 
 PlanCard.displayName = 'PlanCard';
 
+// ========== COMPOSANT PRINCIPAL ==========
 function Programs() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [expandedCards, setExpandedCards] = useState({});
-  const { programs, addToCart, isInCart } = useContext(ShopContext);
+  const [isOffline, setIsOffline] = useState(false);
+  const [isRetrying, setIsRetrying] = useState(false);
+  const [displayPrograms, setDisplayPrograms] = useState([]);
+  const [loading, setLoading] = useState(true);
+  
+  const { programs, addToCart, isInCart, fetchPrograms } = useContext(ShopContext);
   const navigate = useNavigate();
 
-  const validPrograms = useMemo(() => {
-    if (!programs || programs.length === 0) return [];
-    return programs.filter(plan => plan && (plan._id || plan.id));
+  // ========== SYNCHRONISATION DES PROGRAMMES ==========
+  useEffect(() => {
+    const syncPrograms = async () => {
+      setLoading(true);
+      
+      try {
+        // 1. D'abord, afficher les données du cache si disponibles
+        const cachedData = cacheService.get();
+        if (cachedData && cachedData.length > 0) {
+          setDisplayPrograms(cachedData);
+          console.log('✅ Programmes affichés depuis le cache');
+        }
+
+        // 2. Essayer de récupérer les données fraîches du backend
+        if (fetchPrograms) {
+          try {
+            await fetchPrograms();
+            console.log('✅ Programmes récupérés depuis MongoDB');
+          } catch (error) {
+            console.warn('⚠️ Impossible de récupérer depuis le backend:', error.message);
+            setIsOffline(true);
+          }
+        }
+
+        // 3. Si nous avons des programmes du contexte (ShopContext), les utiliser
+        if (programs && programs.length > 0) {
+          setDisplayPrograms(programs);
+          // Mettre à jour le cache
+          cacheService.save(programs);
+          setIsOffline(false);
+        } else if (!cachedData) {
+          // Aucune donnée disponible
+          setIsOffline(true);
+        }
+      } catch (error) {
+        console.error('❌ Erreur lors de la synchronisation:', error);
+        setIsOffline(true);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    syncPrograms();
+
+    // Écouter les changements de connexion
+    const handleOnline = () => {
+      setIsOffline(false);
+      syncPrograms(); // Re-synchroniser quand on revient en ligne
+    };
+    const handleOffline = () => setIsOffline(true);
+
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, [fetchPrograms, programs]);
+
+  // Mettre à jour l'affichage quand les programmes du contexte changent
+  useEffect(() => {
+    if (programs && programs.length > 0) {
+      setDisplayPrograms(programs);
+      cacheService.save(programs);
+    }
   }, [programs]);
 
-  const hasPrograms = validPrograms.length > 0;
+  // ========== GESTIONNAIRES D'ÉVÉNEMENTS ==========
+  const handleRetry = useCallback(async () => {
+    setIsRetrying(true);
+    try {
+      if (fetchPrograms) {
+        await fetchPrograms();
+      }
+      setIsOffline(false);
+      toast.success('Connexion rétablie !');
+    } catch (error) {
+      toast.error('Connexion impossible. Vérifiez votre réseau.');
+    } finally {
+      setIsRetrying(false);
+    }
+  }, [fetchPrograms]);
 
   const toggleCardExpansion = useCallback((cardId) => {
     setExpandedCards(prev => {
@@ -494,7 +645,7 @@ function Programs() {
       price: price,
       priceDisplay: plan.priceDisplay || `${price}€`,
       type: 'program',
-      iconType: iconConfig.icon.name, // Stocke le nom pour récupérer l'icône dans le cart
+      iconType: iconConfig.icon.name,
       level: level,
       duration: plan.duration || 'month',
       features: features.slice(0, 3),
@@ -510,12 +661,15 @@ function Programs() {
     navigate(`/program/${planId}`);
   }, [navigate]);
 
-  if (!programs || programs.length === 0) {
+  // ========== RENDU ==========
+  
+  // État de chargement initial
+  if (loading && displayPrograms.length === 0) {
     return (
       <div className="app programs-page">
         <Navbar menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
         <div className="loading-container">
-          <FaSpinner className="spinner-icon" aria-hidden="true" />
+          <FaSpinner className="spinner-icon spin" aria-hidden="true" />
           <h2>Loading programs...</h2>
         </div>
         <Footer />
@@ -523,22 +677,35 @@ function Programs() {
     );
   }
 
-  if (!hasPrograms) {
+  // Aucun programme disponible (ni en ligne, ni en cache)
+  if (!loading && displayPrograms.length === 0) {
     return (
       <div className="app programs-page">
         <Navbar menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
         <div className="error-container">
+          <FaExclamationTriangle size={48} color="#f59e0b" />
           <h2>No programs available</h2>
-          <p>Please check back later or contact support.</p>
+          <p>Unable to load programs. Please check your connection and try again.</p>
+          <button onClick={handleRetry} className="retry-btn">
+            <FaSync /> Retry
+          </button>
         </div>
         <Footer />
       </div>
     );
   }
 
+  const validPrograms = displayPrograms.filter(plan => plan && (plan._id || plan.id));
+
   return (
     <div className="app programs-page">
       <Navbar menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
+      
+      <AnimatePresence>
+        {isOffline && (
+          <OfflineBanner onRetry={handleRetry} isRetrying={isRetrying} />
+        )}
+      </AnimatePresence>
 
       <section className="programs-hero">
         <div className="hero-overlay">
@@ -556,7 +723,9 @@ function Programs() {
               animate={{ opacity: 1 }} 
               transition={{ delay: 0.2 }}
             >
-              Choose the program that matches your goals
+              {isOffline 
+                ? 'Showing cached programs (offline mode)' 
+                : 'Choose the program that matches your goals'}
             </motion.p>
             <motion.div 
               className="hero-features" 
@@ -581,6 +750,7 @@ function Programs() {
             transition={{ duration: 0.6 }}
           >
             Our Coaching Plans
+            {isOffline && <span className="cache-badge">Cached</span>}
           </motion.h2>
         </div>
 

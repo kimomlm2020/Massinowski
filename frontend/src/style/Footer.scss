@@ -127,8 +127,8 @@ $transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     @include hover-lift;
 
     .logo-img {
-      width: 50px;
-      height: 50px;
+      width: 80px;
+      height: 80px;
       object-fit: contain;
       filter: drop-shadow(0 0 10px rgba($color-gold, 0.3));
     }
@@ -546,8 +546,8 @@ $transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   .footer-brand {
     .logo-wrapper {
       .logo-img {
-        width: 40px;
-        height: 40px;
+        width: 80px;
+        height: 80px;
       }
       .logo-text {
         font-size: 20px;
@@ -565,7 +565,7 @@ $transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     .footer-link {
-      font-size: 13px;
+      font-size: 14px;
     }
   }
 

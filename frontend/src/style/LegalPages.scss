@@ -88,15 +88,9 @@ $breakpoint-desktop: 1200px;
 }
 
 @keyframes goldPulse {
-  0% {
-    box-shadow: 0 0 0 0 rgba($primary-color, 0.4);
-  }
-  70% {
-    box-shadow: 0 0 0 10px rgba($primary-color, 0);
-  }
-  100% {
-    box-shadow: 0 0 0 0 rgba($primary-color, 0);
-  }
+  0% { box-shadow: 0 0 0 0 rgba($primary-color, 0.4); }
+  70% { box-shadow: 0 0 0 10px rgba($primary-color, 0); }
+  100% { box-shadow: 0 0 0 0 rgba($primary-color, 0); }
 }
 
 @keyframes fadeInUp {
@@ -110,21 +104,31 @@ $breakpoint-desktop: 1200px;
   }
 }
 
+@keyframes rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
 // =============================================================================
 // STYLES COMMUNS POUR LES PAGES LÉGALES
 // =============================================================================
 
-.privacy-hero,
-.terms-hero {
+.legal-page {
+  background: $dark-bg;
+  min-height: 100vh;
+  padding-top: 120px; // pour éviter que le navbar cache le hero
+}
+
+.legal-hero {
   position: relative;
-  min-height: 20vh;
+  min-height: 40vh; // Augmenté pour meilleure présence
   background: $gradient-dark;
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
   overflow: hidden;
-  margin-top: 100px;
+  
   @include respond-to(tablet) {
     min-height: 35vh;
   }
@@ -205,6 +209,16 @@ $breakpoint-desktop: 1200px;
         margin: 0 1rem;
         opacity: 0.5;
       }
+      
+      @include respond-to(mobile) {
+        font-size: 0.9rem;
+        padding: 0.5rem 1rem;
+        
+        &::before,
+        &::after {
+          margin: 0 0.5rem;
+        }
+      }
     }
   }
 }
@@ -213,8 +227,7 @@ $breakpoint-desktop: 1200px;
 // CONTENU PRINCIPAL
 // =============================================================================
 
-.privacy-content,
-.terms-content {
+.legal-content {
   background: $dark-bg;
   padding: 5rem 0;
   position: relative;
@@ -227,249 +240,13 @@ $breakpoint-desktop: 1200px;
     max-width: 1000px;
     margin: 0 auto;
     padding: 0 2rem;
+    position: relative;
     
     @include respond-to(tablet) {
       padding: 0 1.5rem;
     }
-  }
-  
-  // Texte d'introduction
-  .intro-text {
-    margin-bottom: 4rem;
-    text-align: center;
     
-    p {
-      color: $white-muted;
-      font-size: 1.3rem;
-      line-height: 1.8;
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 2rem;
-      @include glass-effect;
-      border-radius: 20px;
-      border-left: 4px solid $primary-color;
-      
-      @include respond-to(tablet) {
-        font-size: 1.1rem;
-        padding: 1.5rem;
-      }
-    }
-  }
-  
-  // Sections
-  .privacy-sections,
-  .terms-sections {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-    margin-bottom: 4rem;
-  }
-  
-  .privacy-section,
-  .terms-section {
-    background: $dark-light;
-    border-radius: 16px;
-    padding: 2rem;
-    transition: $transition-base;
-    border: 1px solid rgba($primary-color, 0.1);
-    position: relative;
-    overflow: hidden;
-    
-    @include respond-to(mobile) {
-      padding: 1.5rem;
-    }
-    
-    &::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 4px;
-      height: 0;
-      background: $gradient-gold;
-      transition: height 0.3s ease;
-      border-radius: 4px 0 0 4px;
-    }
-    
-    &:hover {
-      transform: translateX(10px);
-      border-color: rgba($primary-color, 0.3);
-      box-shadow: $shadow-gold;
-      
-      &::before {
-        height: 100%;
-      }
-    }
-    
-    h3 {
-      color: $primary-color;
-      font-size: 1.5rem;
-      margin-bottom: 1rem;
-      font-weight: 600;
-      letter-spacing: 1px;
-      
-      @include respond-to(mobile) {
-        font-size: 1.3rem;
-      }
-    }
-    
-    p {
-      color: $white-muted;
-      line-height: 1.8;
-      font-size: 1rem;
-      margin: 0;
-      
-      @include respond-to(mobile) {
-        font-size: 0.95rem;
-      }
-    }
-  }
-  
-  // Section contact (pour Privacy)
-  .contact-section {
-    @include glass-effect;
-    border-radius: 24px;
-    padding: 3rem;
-    text-align: center;
-    margin-top: 3rem;
-    
-    @include respond-to(mobile) {
-      padding: 2rem;
-    }
-    
-    h3 {
-      @include gold-text;
-      font-size: 1.8rem;
-      margin-bottom: 1.5rem;
-      
-      @include respond-to(mobile) {
-        font-size: 1.5rem;
-      }
-    }
-    
-    p {
-      color: $white-muted;
-      font-size: 1.1rem;
-      margin-bottom: 2rem;
-      
-      @include respond-to(mobile) {
-        font-size: 1rem;
-      }
-    }
-    
-    .contact-methods {
-      display: flex;
-      justify-content: center;
-      gap: 3rem;
-      flex-wrap: wrap;
-      
-      p {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        background: rgba($primary-color, 0.1);
-        padding: 1rem 2rem;
-        border-radius: 50px;
-        transition: $transition-base;
-        border: 1px solid rgba($primary-color, 0.2);
-        
-        &:hover {
-          transform: translateY(-3px);
-          background: rgba($primary-color, 0.15);
-          border-color: $primary-color;
-          box-shadow: $shadow-gold;
-        }
-      }
-    }
-  }
-  
-  // Disclaimer médical (pour Terms)
-  .medical-disclaimer {
-    margin-top: 4rem;
-    
-    .disclaimer-warning {
-      background: linear-gradient(135deg, rgba($primary-dark, 0.1), rgba($primary-color, 0.05));
-      border: 2px solid rgba($primary-color, 0.3);
-      border-radius: 24px;
-      padding: 2.5rem;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-      
-      &::before {
-        content: '';
-        position: absolute;
-        top: -50%;
-        left: -50%;
-        width: 200%;
-        height: 200%;
-        background: radial-gradient(circle, rgba($primary-color, 0.1) 0%, transparent 70%);
-        animation: rotate 20s linear infinite;
-      }
-      
-      h3 {
-        color: $primary-color;
-        font-size: 1.8rem;
-        margin-bottom: 1.5rem;
-        position: relative;
-        z-index: 1;
-        
-        @include respond-to(mobile) {
-          font-size: 1.5rem;
-        }
-      }
-      
-      p {
-        color: $white-muted;
-        font-size: 1.1rem;
-        line-height: 1.8;
-        max-width: 800px;
-        margin: 0 auto;
-        position: relative;
-        z-index: 1;
-        
-        @include respond-to(mobile) {
-          font-size: 1rem;
-        }
-      }
-    }
-  }
-}
-
-// =============================================================================
-// ÉLÉMENTS DÉCORATIFS
-// =============================================================================
-
-// Icônes de section
-.privacy-section,
-.terms-section {
-  position: relative;
-  
-  &::after {
-    content: '✦';
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    color: $primary-color;
-    opacity: 0.1;
-    font-size: 2rem;
-    transition: $transition-base;
-  }
-  
-  &:hover::after {
-    opacity: 0.3;
-    transform: rotate(90deg);
-  }
-}
-
-// Lignes décoratives
-.privacy-content,
-.terms-content {
-  position: relative;
-  
-  .container {
-    position: relative;
-    
+    // Lignes décoratives
     &::before,
     &::after {
       content: '';
@@ -492,123 +269,298 @@ $breakpoint-desktop: 1200px;
       right: -50px;
     }
   }
-}
-
-// =============================================================================
-// RESPONSIVE AVANCÉ
-// =============================================================================
-
-@media (max-width: 1400px) {
-  .privacy-content,
-  .terms-content {
-    .container {
-      max-width: 900px;
-    }
-  }
-}
-
-@media (max-width: 1200px) {
-  .privacy-content,
-  .terms-content {
-    .container {
+  
+  // Texte d'introduction
+  .intro-text {
+    margin-bottom: 4rem;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+    
+    p {
+      color: $white-muted;
+      font-size: 1.3rem;
+      line-height: 1.8;
       max-width: 800px;
-    }
-  }
-}
-
-@media (max-width: 768px) {
-  .privacy-hero,
-  .terms-hero {
-    .hero-content {
-      h1 {
-        font-size: 2.5rem;
+      margin: 0 auto;
+      padding: 2rem;
+      @include glass-effect;
+      border-radius: 20px;
+      border-left: 4px solid $primary-color;
+      
+      @include respond-to(tablet) {
+        font-size: 1.1rem;
+        padding: 1.5rem;
+      }
+      
+      @include respond-to(mobile) {
+        font-size: 1rem;
+        padding: 1rem;
       }
     }
   }
+}
+
+// =============================================================================
+// SECTIONS
+// =============================================================================
+
+.legal-sections {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  margin-bottom: 4rem;
+  position: relative;
+  z-index: 1;
+}
+
+.legal-section {
+  background: $dark-light;
+  border-radius: 16px;
+  padding: 2rem;
+  transition: $transition-base;
+  border: 1px solid rgba($primary-color, 0.1);
+  position: relative;
+  overflow: hidden;
   
-  .privacy-content,
-  .terms-content {
-    .intro-text p {
-      font-size: 1.1rem;
+  @include respond-to(mobile) {
+    padding: 1.5rem;
+  }
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 0;
+    background: $gradient-gold;
+    transition: height 0.3s ease;
+    border-radius: 4px 0 0 4px;
+  }
+  
+  &::after {
+    content: '✦';
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    color: $primary-color;
+    opacity: 0.1;
+    font-size: 2rem;
+    transition: $transition-base;
+  }
+  
+  &:hover {
+    transform: translateX(10px);
+    border-color: rgba($primary-color, 0.3);
+    box-shadow: $shadow-gold;
+    
+    &::before {
+      height: 100%;
+    }
+    
+    &::after {
+      opacity: 0.3;
+      transform: rotate(90deg);
+    }
+  }
+  
+  h3 {
+    color: $primary-color;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    
+    @include respond-to(mobile) {
+      font-size: 1.3rem;
+    }
+  }
+  
+  p {
+    color: $white-muted;
+    line-height: 1.8;
+    font-size: 1rem;
+    margin: 0;
+    
+    @include respond-to(mobile) {
+      font-size: 0.95rem;
+    }
+  }
+}
+
+// Sections numérotées (Privacy Policy)
+.numbered-sections {
+  .legal-section {
+    display: flex;
+    gap: 1.5rem;
+    align-items: flex-start;
+    
+    @include respond-to(mobile) {
+      flex-direction: column;
+      gap: 1rem;
+    }
+  }
+  
+  .section-number {
+    font-size: 2rem;
+    font-weight: 700;
+    color: $primary-color;
+    opacity: 0.3;
+    line-height: 1;
+    flex-shrink: 0;
+    min-width: 50px;
+    
+    @include respond-to(mobile) {
+      font-size: 1.5rem;
+    }
+  }
+  
+  .section-content {
+    flex: 1;
+    
+    h3 {
+      margin-bottom: 0.5rem;
+    }
+  }
+}
+
+// =============================================================================
+// SECTION CONTACT (Privacy)
+// =============================================================================
+
+.contact-section {
+  @include glass-effect;
+  border-radius: 24px;
+  padding: 3rem;
+  text-align: center;
+  margin-top: 3rem;
+  position: relative;
+  z-index: 1;
+  
+  @include respond-to(mobile) {
+    padding: 2rem;
+  }
+  
+  h3 {
+    @include gold-text;
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    
+    @include respond-to(mobile) {
+      font-size: 1.5rem;
+    }
+  }
+  
+  p {
+    color: $white-muted;
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+    
+    @include respond-to(mobile) {
+      font-size: 1rem;
+    }
+  }
+  
+  .contact-methods {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    flex-wrap: wrap;
+    
+    @include respond-to(mobile) {
+      gap: 1rem;
+    }
+  }
+  
+  .contact-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: $white-muted;
+    text-decoration: none;
+    background: rgba($primary-color, 0.1);
+    padding: 1rem 2rem;
+    border-radius: 50px;
+    transition: $transition-base;
+    border: 1px solid rgba($primary-color, 0.2);
+    
+    &:hover {
+      transform: translateY(-3px);
+      background: rgba($primary-color, 0.15);
+      border-color: $primary-color;
+      box-shadow: $shadow-gold;
+      color: $primary-color;
+    }
+    
+    @include respond-to(mobile) {
+      width: 100%;
+      justify-content: center;
+      padding: 0.8rem 1.5rem;
+    }
+    
+    .icon {
+      font-size: 1.2rem;
+    }
+  }
+}
+
+// =============================================================================
+// DISCLAIMER MÉDICAL (Terms)
+// =============================================================================
+
+.medical-disclaimer {
+  margin-top: 4rem;
+  position: relative;
+  z-index: 1;
+  
+  .disclaimer-warning {
+    background: linear-gradient(135deg, rgba($primary-dark, 0.1), rgba($primary-color, 0.05));
+    border: 2px solid rgba($primary-color, 0.3);
+    border-radius: 24px;
+    padding: 2.5rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    
+    @include respond-to(mobile) {
       padding: 1.5rem;
     }
     
-    .privacy-section,
-    .terms-section {
-      padding: 1.5rem;
+    &::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba($primary-color, 0.1) 0%, transparent 70%);
+      animation: rotate 20s linear infinite;
+    }
+    
+    h3 {
+      color: $primary-color;
+      font-size: 1.8rem;
+      margin-bottom: 1.5rem;
+      position: relative;
+      z-index: 1;
       
-      h3 {
+      @include respond-to(mobile) {
         font-size: 1.3rem;
       }
     }
     
-    .contact-section {
-      padding: 2rem;
+    p {
+      color: $white-muted;
+      font-size: 1.1rem;
+      line-height: 1.8;
+      max-width: 800px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
       
-      .contact-methods {
-        gap: 1rem;
-        
-        p {
-          width: 100%;
-          justify-content: center;
-        }
-      }
-    }
-  }
-}
-
-@media (max-width: 480px) {
-  .privacy-hero,
-  .terms-hero {
-    .hero-content {
-      h1 {
-        font-size: 2rem;
-      }
-      
-      .last-updated {
-        font-size: 0.9rem;
-        
-        &::before,
-        &::after {
-          margin: 0 0.5rem;
-        }
-      }
-    }
-  }
-  
-  .privacy-content,
-  .terms-content {
-    padding: 2rem 0;
-    
-    .intro-text p {
-      font-size: 1rem;
-      padding: 1rem;
-    }
-    
-    .privacy-section,
-    .terms-section {
-      padding: 1.2rem;
-      
-      h3 {
-        font-size: 1.2rem;
-      }
-      
-      p {
-        font-size: 0.9rem;
-      }
-    }
-    
-    .medical-disclaimer {
-      .disclaimer-warning {
-        padding: 1.5rem;
-        
-        h3 {
-          font-size: 1.3rem;
-        }
-        
-        p {
-          font-size: 0.95rem;
-        }
+      @include respond-to(mobile) {
+        font-size: 1rem;
       }
     }
   }
@@ -618,9 +570,8 @@ $breakpoint-desktop: 1200px;
 // ACCESSIBILITÉ
 // =============================================================================
 
-.privacy-section,
-.terms-section,
-.contact-methods p {
+.legal-section,
+.contact-link {
   &:focus-visible {
     outline: 2px solid $primary-color;
     outline-offset: 2px;
@@ -632,10 +583,11 @@ $breakpoint-desktop: 1200px;
 // =============================================================================
 
 @media print {
-  .privacy-hero,
-  .terms-hero {
+  .legal-hero {
     background: none;
     color: black;
+    min-height: auto;
+    padding: 2rem 0;
     
     &::before,
     &::after {
@@ -645,17 +597,33 @@ $breakpoint-desktop: 1200px;
     h1 {
       color: black;
       text-shadow: none;
+      font-size: 2rem;
+    }
+    
+    .last-updated {
+      color: #666;
+      
+      &::before,
+      &::after {
+        display: none;
+      }
     }
   }
   
-  .privacy-content,
-  .terms-content {
+  .legal-content {
     background: white;
+    padding: 2rem 0;
     
-    .privacy-section,
-    .terms-section {
+    .intro-text p {
+      background: none;
+      border: 1px solid #ccc;
+      color: #333;
+    }
+    
+    .legal-section {
       border: 1px solid #ccc;
       box-shadow: none;
+      break-inside: avoid;
       
       h3 {
         color: black;
@@ -664,6 +632,18 @@ $breakpoint-desktop: 1200px;
       p {
         color: #333;
       }
+      
+      &::before,
+      &::after {
+        display: none;
+      }
+    }
+    
+    .contact-section,
+    .medical-disclaimer .disclaimer-warning {
+      background: none;
+      border: 1px solid #ccc;
+      box-shadow: none;
     }
   }
 }
