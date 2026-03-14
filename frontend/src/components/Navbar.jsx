@@ -1,5 +1,5 @@
 // ============================================
-// NAVBAR.JSX - VERSION CORRIGÉE POUR MOBILE SCROLL
+// NAVBAR.JSX - VERSION ISOLÉE BEM
 // ============================================
 
 import React, { useState, useEffect, useContext, useRef, useCallback } from "react";
@@ -39,7 +39,7 @@ const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [cartCount, setCartCount] = useState(0);
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [navbarHeight, setNavbarHeight] = useState(100); // Hauteur dynamique
+  const [navbarHeight, setNavbarHeight] = useState(100);
 
   const token = localStorage.getItem("token");
 
@@ -50,21 +50,19 @@ const Navbar = () => {
     "/refund-policy"
   ].includes(location.pathname);
 
-  // CORRECTION: Mettre à jour la hauteur de la navbar dynamiquement
+  // Mettre à jour la hauteur de la navbar dynamiquement
   useEffect(() => {
     const updateNavbarHeight = () => {
       const navbar = navbarRef.current;
       if (navbar) {
         const height = navbar.offsetHeight;
         setNavbarHeight(height);
-        // Mettre à jour aussi la variable CSS pour les autres composants
         document.documentElement.style.setProperty('--navbar-height', `${height}px`);
       }
     };
 
     updateNavbarHeight();
     
-    // Observer les changements de classe (scrolled)
     const observer = new MutationObserver(updateNavbarHeight);
     if (navbarRef.current) {
       observer.observe(navbarRef.current, { attributes: true, attributeFilter: ['class'] });
@@ -127,11 +125,9 @@ const Navbar = () => {
     }
   }, [menuOpen]);
 
-  // CORRECTION: Fonction de scroll avec offset dynamique
+  // Fonction de scroll avec offset dynamique
   const scrollToSection = useCallback((id) => {
-    // Petit délai pour laisser le DOM se stabiliser (important sur mobile)
     setTimeout(() => {
-      // Handle home section specially
       if (id === "home") {
         window.scrollTo({ top: 0, behavior: "smooth" });
         return;
@@ -139,38 +135,29 @@ const Navbar = () => {
 
       const element = document.getElementById(id);
       if (element) {
-        // CORRECTION: Calcul précis de la position avec offset dynamique
         const elementRect = element.getBoundingClientRect();
         const absoluteElementTop = elementRect.top + window.pageYOffset;
-        
-        // Offset = hauteur navbar + marge de sécurité (20px)
         const offset = navbarHeight + 20;
-        
         const scrollPosition = absoluteElementTop - offset;
         
-        // CORRECTION: Utiliser scrollTo avec behavior smooth et position calculée
         window.scrollTo({
           top: Math.max(0, scrollPosition),
           behavior: "smooth"
         });
         
-        // CORRECTION: Fallback pour mobile si smooth scroll ne fonctionne pas
         setTimeout(() => {
           const currentPos = window.pageYOffset;
           const targetPos = Math.max(0, scrollPosition);
-          
-          // Si on n'est pas arrivé à destination (différence > 50px), forcer le scroll
           if (Math.abs(currentPos - targetPos) > 50) {
             window.scrollTo(0, targetPos);
           }
         }, 500);
       }
-    }, menuOpen ? 350 : 100); // Délai plus long si on ferme le menu mobile
+    }, menuOpen ? 350 : 100);
   }, [navbarHeight, menuOpen]);
 
   // Navigation handler
   const handleNavigation = (link) => {
-    // Fermer le menu mobile d'abord
     const wasMenuOpen = menuOpen;
     setMenuOpen(false);
     setDropdownOpen(false);
@@ -180,14 +167,11 @@ const Navbar = () => {
       return;
     }
 
-    // Si pas sur la home page, naviguer d'abord
     if (location.pathname !== "/") {
       navigate("/", { state: { scrollTo: link.path } });
       return;
     }
 
-    // Sur la home page, scroll directement
-    // Si le menu était ouvert, attendre la fermeture
     if (wasMenuOpen) {
       setTimeout(() => {
         scrollToSection(link.path);
@@ -202,10 +186,8 @@ const Navbar = () => {
     if (location.pathname === "/" && location.state?.scrollTo) {
       const id = location.state.scrollTo;
       
-      // Attendre que la page soit chargée
       const timer = setTimeout(() => {
         scrollToSection(id);
-        // Nettoyer l'état
         navigate("/", { replace: true, state: null });
       }, 300);
 
@@ -232,67 +214,67 @@ const Navbar = () => {
   };
 
   return (
-    <div 
+    <nav 
       ref={navbarRef}
-      className={`navbar ${scrolled ? "scrolled" : ""} ${isDarkPage ? "navbar-dark-page" : ""}`}
+      className={`main-navbar ${scrolled ? "main-navbar--scrolled" : ""} ${isDarkPage ? "main-navbar--dark-page" : ""}`}
     >
-      <div className="nav-container">
+      <div className="main-navbar__container">
         {/* Logo */}
-        <Link to="/" className="logo-container" onClick={() => scrollToSection("home")}>
-          <img src={assets.logo} className="navbar-logo" alt="logo" />
+        <Link to="/" className="main-navbar__logo" onClick={() => scrollToSection("home")}>
+          <img src={assets.logo} className="main-navbar__logo-img" alt="logo" />
         </Link>
 
         {/* Desktop menu */}
-        <ul className="navbar-menu">
+        <ul className="main-navbar__menu">
           {NAV_LINKS.map((link) => (
             <li
               key={link.label}
-              className={`nav-link ${isActive(link) ? "active" : ""}`}
+              className={`main-navbar__menu-item ${isActive(link) ? "main-navbar__menu-item--active" : ""}`}
               onClick={() => handleNavigation(link)}
             >
-              <p>{link.label}</p>
-              <hr className="nav-indicator" />
+              <span className="main-navbar__menu-text">{link.label}</span>
+              <span className="main-navbar__menu-indicator"></span>
             </li>
           ))}
         </ul>
 
         {/* Actions */}
-        <div className="navbar-actions">
-          <div className="user-menu-container" ref={dropdownRef}>
+        <div className="main-navbar__actions">
+          <div className="main-navbar__user-menu" ref={dropdownRef}>
             <button
-              className={`icon-btn user-btn ${dropdownOpen ? "active" : ""}`}
+              className={`main-navbar__icon-btn main-navbar__user-btn ${dropdownOpen ? "main-navbar__icon-btn--active" : ""}`}
               onClick={() => token ? setDropdownOpen(!dropdownOpen) : navigate("/login")}
             >
               <FaUser />
-              {token && <FaChevronDown className={`chevron ${dropdownOpen ? "open" : ""}`} />}
+              {token && <FaChevronDown className={`main-navbar__chevron ${dropdownOpen ? "main-navbar__chevron--open" : ""}`} />}
             </button>
 
             {token && dropdownOpen && (
-              <div className="dropdown-menu">
-                <button onClick={() => { navigate("/profile"); setDropdownOpen(false); }}>
+              <div className="main-navbar__dropdown">
+                <button className="main-navbar__dropdown-item" onClick={() => { navigate("/profile"); setDropdownOpen(false); }}>
                   <FaUserCircle /> Profile
                 </button>
-                <button onClick={() => { navigate("/orders"); setDropdownOpen(false); }}>
+                <button className="main-navbar__dropdown-item" onClick={() => { navigate("/orders"); setDropdownOpen(false); }}>
                   <FaShoppingBag /> Orders
                 </button>
-                <button onClick={logout}>
+                <button className="main-navbar__dropdown-item" onClick={logout}>
                   <FaSignOutAlt /> Logout
                 </button>
               </div>
             )}
           </div>
 
-          <Link to="/cart" className="cart-link">
-            <button className="icon-btn cart-btn">
+          <Link to="/cart" className="main-navbar__cart-link">
+            <button className="main-navbar__icon-btn main-navbar__cart-btn">
               <FaShoppingCart />
               {cartCount > 0 && (
-                <span className="cart-badge">{cartCount > 99 ? "99+" : cartCount}</span>
+                <span className="main-navbar__cart-badge">{cartCount > 99 ? "99+" : cartCount}</span>
               )}
             </button>
           </Link>
 
           <button
-            className="menu-toggle-btn"
+            className="main-navbar__toggle-btn"
             onClick={() => setMenuOpen(!menuOpen)}
             aria-label={menuOpen ? "Close menu" : "Open menu"}
             aria-expanded={menuOpen}
@@ -304,20 +286,20 @@ const Navbar = () => {
 
       {/* Mobile sidebar */}
       <div 
-        className={`mobile-sidebar ${menuOpen ? "open" : ""}`}
+        className={`main-navbar__sidebar ${menuOpen ? "main-navbar__sidebar--open" : ""}`}
         aria-hidden={!menuOpen}
       >
         <div
-          className="sidebar-overlay"
+          className="main-navbar__sidebar-overlay"
           onClick={() => setMenuOpen(false)}
           aria-label="Close menu"
         />
 
-        <div className="sidebar-content">
-          <div className="sidebar-header">
-            <span className="sidebar-title">Menu</span>
+        <div className="main-navbar__sidebar-content">
+          <div className="main-navbar__sidebar-header">
+            <span className="main-navbar__sidebar-title">Menu</span>
             <button
-              className="close-btn"
+              className="main-navbar__sidebar-close"
               onClick={() => setMenuOpen(false)}
               aria-label="Close menu"
             >
@@ -325,11 +307,11 @@ const Navbar = () => {
             </button>
           </div>
 
-          <ul className="sidebar-menu" role="menu">
+          <ul className="main-navbar__sidebar-menu" role="menu">
             {NAV_LINKS.map((link) => (
-              <li key={link.label} className="sidebar-item" role="none">
+              <li key={link.label} className="main-navbar__sidebar-item" role="none">
                 <button
-                  className={`sidebar-link ${isActive(link) ? "active" : ""}`}
+                  className={`main-navbar__sidebar-link ${isActive(link) ? "main-navbar__sidebar-link--active" : ""}`}
                   onClick={() => handleNavigation(link)}
                   role="menuitem"
                 >
@@ -340,24 +322,24 @@ const Navbar = () => {
           </ul>
 
           {token ? (
-            <div className="sidebar-footer">
+            <div className="main-navbar__sidebar-footer">
               <button 
-                className="sidebar-link secondary"
+                className="main-navbar__sidebar-link main-navbar__sidebar-link--secondary"
                 onClick={() => { navigate("/profile"); setMenuOpen(false); }}
               >
                 <FaUserCircle /> Profile
               </button>
               <button 
-                className="sidebar-link secondary"
+                className="main-navbar__sidebar-link main-navbar__sidebar-link--secondary"
                 onClick={logout}
               >
                 <FaSignOutAlt /> Logout
               </button>
             </div>
           ) : (
-            <div className="sidebar-footer">
+            <div className="main-navbar__sidebar-footer">
               <button 
-                className="sidebar-link primary"
+                className="main-navbar__sidebar-link main-navbar__sidebar-link--primary"
                 onClick={() => { navigate("/login"); setMenuOpen(false); }}
               >
                 <FaUser /> Login
@@ -366,7 +348,7 @@ const Navbar = () => {
           )}
         </div>
       </div>
-    </div>
+    </nav>
   );
 };
 
