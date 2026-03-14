@@ -333,6 +333,14 @@ const PlanCard = React.memo(({
   const features = useMemo(() => getProgramFeatures(plan), [plan]);
   const hasMoreFeatures = features.length > 3;
 
+  // Formater la durée pour l'affichage
+  const formatDuration = (duration) => {
+    if (!duration) return '';
+    // Supprime le slash initial si présent
+    const cleanDuration = duration.replace(/^\//, '');
+    return cleanDuration;
+  };
+
   return (
     <motion.div
       className={`plan-card ${plan.popular ? 'popular' : ''} ${expanded ? 'expanded' : ''} ${inCartStatus ? 'in-cart' : ''}`}
@@ -365,7 +373,7 @@ const PlanCard = React.memo(({
 
       <div className="plan-price">
         <span className="price">{plan.priceDisplay || `${plan.price || 0}€`}</span>
-        <span className="duration">{plan.duration || 'month'}</span>
+        <span className="duration">/{formatDuration(plan.duration)}</span> {/* ← CORRIGÉ : utilise la durée réelle */}
       </div>
 
       <div className="plan-description">
