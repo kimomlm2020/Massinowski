@@ -5,14 +5,13 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import Add from "./pages/Add";
 import List from "./pages/List";
 import Orders from "./pages/Orders";
-import OrderDetail from "./pages/OrderDetail"; // ⭐ AJOUTÉ
+import OrderDetail from "./pages/OrderDetail";
 import Login from "./components/Login";
 import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import './style/App.scss';
 
 export const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:4000";
-export const currency = '$';
+export const currency = '£';
 
 const App = () => {
   const [token, setToken] = useState(localStorage.getItem('token') ? localStorage.getItem('token') : '');
@@ -33,7 +32,7 @@ const App = () => {
           <Sidebar />
           <div className="main-content">
             <Routes>
-              <Route path="/" element={<Navigate to="/list" replace />} />
+              <Route path="/" element={<Navigate to="/add" replace />} />
               <Route path="/add" element={<Add token={token} />} />
               <Route path="/list" element={<List token={token} />} />
               <Route path="/orders" element={<Orders token={token} />} />

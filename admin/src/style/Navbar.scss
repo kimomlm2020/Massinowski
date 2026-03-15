@@ -17,10 +17,23 @@
     filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.3));
     
     @media (max-width: $mobile) {
-      height: 60px;
+      height: 80px;
     }
   }
-  
+  logo-link {
+    display: inline-block;
+    cursor: pointer;
+    text-decoration: none; 
+    
+    img {
+      display: block;
+      transition: transform 0.2s ease; 
+      
+      &:hover {
+        transform: scale(1.05);
+      }
+    }
+  }
   button {
     padding: 0.5rem 1.5rem;
     background: transparent;
